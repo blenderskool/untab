@@ -1,11 +1,12 @@
 <script>
-  import constants from '../constants';
   import { fade } from 'svelte/transition';
+  import Results from './Results.svelte';
+
+  import { results } from '../store';
+  import constants from '../constants';
 
   export let enabled = false;
-  let input;
-  let port;
-  let searchResults = [];
+  let input, port;
 
   function search() {
     port.postMessage({ data: input.value });
@@ -19,7 +20,7 @@
     if (port === undefined) {
       port = chrome.runtime.connect({ name: constants.SEARCH_PORT });
       port.onMessage.addListener((response) => {
-        searchResults = response;
+        results.set(response);
       });
     }
   }
@@ -34,19 +35,12 @@
         bind:this={input}
         on:input={search}
       >
-      <ul class="results">
-        {#each searchResults as { item }}
-          <li>
-            {item.title}
-          </li>
-        {/each}
-      </ul>
+      <Results />
     </div>
   </div>
 {/if}
 
 <style>
-
   :global(body) {
     font-size: 16px;
   }
@@ -85,15 +79,5 @@
     padding: 0 16px;
     font-weight: 700;
     font-size: 1.2rem;
-  }
-
-  .results {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  .results li {
-    padding: 12px 16px;
   }
 </style>

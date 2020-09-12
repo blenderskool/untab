@@ -4,10 +4,14 @@ import constants from '../constants';
 /**
  * @returns {Array<Object>} all the currently opened tabs (including tabs from incognito window)
  */
-function getTabs() {
-  return new Promise(resolve => {
+async function getTabs() {
+  const tabs = await new Promise(resolve => {
     chrome.tabs.query({}, resolve);
   });
+
+  return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
+    windowId, title, url, id, favicon: favIconUrl,
+  }));
 }
 
 chrome.runtime.onConnect.addListener(port => {
@@ -21,7 +25,16 @@ chrome.runtime.onConnect.addListener(port => {
     const fuse = new Fuse(tabs, {
       threshold: 0.7,
       includeMatches: true,
-      keys: [ 'title' ],
+      keys: [
+        {
+          name: 'title',
+          weight: 0.9,
+        },
+        {
+          name: 'url',
+          weight: 0.7,
+        },
+      ],
     });
 
     port.postMessage(fuse.search(req.data));
