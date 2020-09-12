@@ -1,41 +1,23 @@
 <script>
   import { fade } from 'svelte/transition';
   import Results from './Results.svelte';
+  import Input from './Input.svelte';
 
-  import { results } from '../store';
+  import { results, searchValue } from '../store';
   import constants from '../constants';
 
   export let enabled = false;
-  let input, port;
-
-  function search() {
-    port.postMessage({ data: input.value });
-  }
-
-  $: if (enabled) {
-    setTimeout(() => {
-      input.focus();
-    }, 101);
-
-    if (port === undefined) {
-      port = chrome.runtime.connect({ name: constants.SEARCH_PORT });
-      port.onMessage.addListener((response) => {
-        results.set(response);
-      });
-    }
-  }
 </script>
 
 {#if enabled}
   <div class="search-wrapper" transition:fade="{{ duration: 100 }}">
     <div class="search">
-      <input
-        type="search"
-        placeholder="Search Tab..."
-        bind:this={input}
-        on:input={search}
-      >
-      <Results />
+
+      <Input />
+
+      {#if $searchValue}
+        <Results />
+      {/if}
     </div>
   </div>
 {/if}
@@ -43,6 +25,7 @@
 <style>
   :global(body) {
     font-size: 16px;
+    color: #2D3748;
   }
 
   :global(*) {
@@ -58,26 +41,27 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
-    justify-content: center;
-    align-items: self-end;
+    flex-direction: column;
+    align-items: center;
   }
 
   .search {
     background-color: #fff;
     position: relative;
     top: 90px;
-    width: 750px;
-    border-radius: 10px;
+    width: 75%;
+    max-width: 620px;
+    min-height: 50px;
+    max-height: 80vh;
+    border-radius: 5px;
     overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
-  .search input {
-    width: 100%;
-    border: none;
-    outline: none;
-    height: 50px;
-    padding: 0 16px;
-    font-weight: 700;
-    font-size: 1.2rem;
+  @supports (backdrop-filter: blur(15px) saturate(2)) {
+    .search {
+      backdrop-filter: blur(15px) saturate(2);
+      background-color: rgba(255, 255, 255, 0.8);
+    }
   }
 </style>
