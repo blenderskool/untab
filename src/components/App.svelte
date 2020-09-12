@@ -1,4 +1,15 @@
 <script>
+	import { fade } from 'svelte/transition';
+
+	export let enabled = false;
+	let input;
+
+	$: if (enabled) {
+		setTimeout(() => {
+			input.focus();
+		}, 101);
+	}
+
 	let results = [
 		{
 			title: 'Tab 1',
@@ -9,22 +20,23 @@
 		{
 			title: 'Tab 3',
 		}
-	]
+	];
 </script>
 
-<div class="search-wrapper">
-
-	<div class="search">
-		<input type="search" placeholder="Search Tab..." >
-		<ul class="results">
-			{#each results as result}
-				<li>
-					{result.title}
-				</li>
-			{/each}
-		</ul>
+{#if enabled}
+	<div class="search-wrapper" transition:fade="{{ duration: 100 }}">
+		<div class="search">
+			<input type="search" placeholder="Search Tab..." bind:this={input} >
+			<ul class="results">
+				{#each results as result}
+					<li>
+						{result.title}
+					</li>
+				{/each}
+			</ul>
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 

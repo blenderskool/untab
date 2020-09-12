@@ -13,4 +13,14 @@ chrome.runtime.onMessage.addListener((req) => {
       frame.style.opacity = 1;
       break;
   }
+
+  frame.contentWindow.postMessage(req, '*');
+});
+
+window.addEventListener('message', (e) => {
+  if (frame.contentWindow !== e.source) return;
+
+  frame.style.opacity = 0;
+  frame.style.visibility = 'hidden';
+  document.activeElement.blur();
 });
