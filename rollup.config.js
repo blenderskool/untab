@@ -67,4 +67,19 @@ export default [
 			})
 		]
 	},
+	{
+		input: 'src/background/index.js',
+		output: {
+			format: 'iife',
+			name: 'background',
+			file: 'dist/background.js'
+		},
+		plugins: [
+			resolve({
+				browser: true
+			}),
+			commonjs(),
+			terser(),
+		],
+	}
 ];

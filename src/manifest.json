@@ -7,5 +7,17 @@
     "js": ["content/content.js"],
     "css": ["content/styles.css"]
   }],
-  "web_accessible_resources": ["index.html"]
+  "web_accessible_resources": ["index.html"],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "commands": {
+    "toggle-search": {
+      "suggested_key": {
+        "default": "Ctrl+Space",
+        "mac": "Command+Space"
+      },
+      "description": "Send a 'toggle-search' event to the extension"
+    }
+  }
 }

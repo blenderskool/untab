@@ -5,5 +5,8 @@ iframe.untab {
   width: 100vw !important;
   height: 100vh !important;
   border: none !important;
-  z-index: 100 !important;
+  z-index: 2147483647 !important;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.1s ease-in-out !important;
 }
