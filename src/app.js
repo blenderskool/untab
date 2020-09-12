@@ -13,6 +13,7 @@ function close(e) {
 }
 
 window.addEventListener('keydown', close);
+app.$on('select', close);
 window.addEventListener('message', ({ data: req }) => {
   if (req.type === constants.OPEN) {
     app.$set({ enabled: true });

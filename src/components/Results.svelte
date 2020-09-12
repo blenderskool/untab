@@ -7,7 +7,7 @@
 {#if $results.length}
   <ul class="results">
     {#each $results as { item }}
-      <Result result={item} />
+      <Result result={item} on:select />
     {/each}
   </ul>
 {/if}

@@ -41,6 +41,20 @@ chrome.runtime.onConnect.addListener(port => {
   })
 })
 
+chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
+
+  if (req.type === constants.SELECT) {
+    // Delay for fade out transitions to finish
+    await new Promise(resolve => setTimeout(resolve, 101));
+
+    const item = req.data;
+    chrome.windows.update(item.windowId, { focused: true }, () => 
+      chrome.tabs.update(item.id, { active: true }, sendResponse)
+    );
+  }
+
+  return true;
+});
 
 chrome.commands.onCommand.addListener((command) => {
   switch (command) {

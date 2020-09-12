@@ -1,9 +1,22 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+  import constants from '../constants';
+
   export let result;
   let faviconError = false;
+
+  const dispatch = createEventDispatcher();
+
+  function handleSelect() {
+    chrome.runtime.sendMessage({
+      type: constants.SELECT,
+      data: result,
+    }, () => dispatch('select'));
+  }
+
 </script>
 
-<li>
+<li on:click={handleSelect}>
   {#if result.favicon && !faviconError}
     <img class="favicon" src={result.favicon} alt="" on:error={() => faviconError = true}>
   {:else}
