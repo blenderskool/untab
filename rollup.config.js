@@ -46,11 +46,11 @@ export default [
 		}
 	},
 	{
-		input: 'src/index.js',
+		input: 'src/content/index.js',
 		output: {
 			format: 'iife',
 			name: 'content',
-			file: 'dist/content.js'
+			file: 'dist/content/content.js'
 		},
 		plugins: [
 			resolve({
@@ -60,6 +60,7 @@ export default [
 			terser(),
 			copy({
 				targets: [
+					{ src: 'src/content/styles.css', dest: 'dist/content/' },
 					{ src: 'src/manifest.json', dest: 'dist/' },
 					{ src: 'src/index.html', dest: 'dist/' }
 				]

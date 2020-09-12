@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["content.js"]
-  }]
+    "js": ["content/content.js"],
+    "css": ["content/styles.css"]
+  }],
+  "web_accessible_resources": ["index.html"]
 }

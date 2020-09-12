@@ -1,0 +1,9 @@
+iframe.untab {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  border: none !important;
+  z-index: 100 !important;
+}
