@@ -1,36 +1,43 @@
 <script>
+	import constants from '../constants';
 	import { fade } from 'svelte/transition';
 
 	export let enabled = false;
 	let input;
+	let port;
+	let searchResults = [];
+
+	function search() {
+		port.postMessage({ data: input.value });
+	}
 
 	$: if (enabled) {
 		setTimeout(() => {
 			input.focus();
 		}, 101);
-	}
 
-	let results = [
-		{
-			title: 'Tab 1',
-		},
-		{
-			title: 'Tab 2',
-		},
-		{
-			title: 'Tab 3',
+		if (port === undefined) {
+			port = chrome.runtime.connect({ name: constants.SEARCH_PORT });
+			port.onMessage.addListener((response) => {
+				searchResults = response;
+			});
 		}
-	];
+	}
 </script>
 
 {#if enabled}
 	<div class="search-wrapper" transition:fade="{{ duration: 100 }}">
 		<div class="search">
-			<input type="search" placeholder="Search Tab..." bind:this={input} >
+			<input
+				type="search"
+				placeholder="Search Tab..."
+				bind:this={input}
+				on:input={search}
+			>
 			<ul class="results">
-				{#each results as result}
+				{#each searchResults as { item }}
 					<li>
-						{result.title}
+						{item.title}
 					</li>
 				{/each}
 			</ul>

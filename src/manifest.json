@@ -19,5 +19,8 @@
       },
       "description": "Send a 'toggle-search' event to the extension"
     }
-  }
+  },
+  "permissions": [
+    "tabs"
+  ]
 }
