@@ -5,20 +5,44 @@
   import constants from '../constants';
   import { results, searchValue } from '../store';
 
-  let input;
+  let input, suggestion = '';
 
   const port = chrome.runtime.connect({ name: constants.SEARCH_PORT });
   port.onMessage.addListener((response) => {
     results.set(response);
+
+    if (response.length) {
+      const match = response[0].matches[0];
+      const index = match.indices[0];
+      suggestion = match.value.substring(index[1]+1);
+    } else {
+      suggestion = '';
+    }
   });
 
   function search() {
+    if (!$searchValue) {
+      suggestion = '';
+    }
+
     port.postMessage({ data: $searchValue });
   }
 
   function clear() {
+    suggestion = '';
     searchValue.set('');
     input.focus();
+  }
+
+  function handleKey(e) {
+    if (e.key !== 'ArrowRight') return;
+
+    const { selectionStart, selectionEnd } = input;
+    if (selectionEnd === selectionStart && selectionStart === $searchValue.length) {
+      e.stopPropagation();
+      searchValue.update(s => s + suggestion);
+      suggestion = '';
+    }
   }
 
   onMount(() => {
@@ -36,14 +60,19 @@
 
   <input
     type="text"
-    placeholder="Search Tab..."
+    placeholder="Search Tab"
     bind:this={input}
     bind:value={$searchValue}
     on:input={search}
-  >
+    on:keydown={handleKey}
+  />
+
+  <div class="highlight">
+    <span style="visibility: hidden;">{$searchValue}</span><span>{suggestion}</span>
+  </div>
 
   {#if $searchValue}
-    <span style="cursor: pointer" on:click={clear}>
+    <span style="cursor: pointer;" on:click={clear}>
       <XIcon class="icon" size="20" />
     </span>
   {/if}
@@ -67,6 +96,15 @@
   }
   .input-wrapper input::placeholder {
     color: #718096;
+  }
+
+  .highlight {
+    position: absolute;
+    left: 48px;
+    font-size: 1.2rem;
+    color: #718096;
+    flex: 1;
+    user-select: none;
   }
 
   :global(.icon) {
