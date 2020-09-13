@@ -14,8 +14,8 @@
   "commands": {
     "toggle-search": {
       "suggested_key": {
-        "default": "Ctrl+Space",
-        "mac": "Command+Space"
+        "default": "Ctrl+Shift+Space",
+        "mac": "Command+Shift+Space"
       },
       "description": "Send a 'toggle-search' event to the extension"
     }

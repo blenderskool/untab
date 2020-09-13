@@ -14,9 +14,7 @@
 
       <Input />
 
-      {#if $searchValue}
-        <Results on:select />
-      {/if}
+      <Results on:select />
     </div>
   </div>
 {/if}

@@ -21,8 +21,6 @@ chrome.runtime.onConnect.addListener(port => {
   if (port.name !== constants.SEARCH_PORT) return;
 
   port.onMessage.addListener(async (req) => {
-    if (!req.data) return;
-
     query = req.data;
 
     const tabs = await getTabs();
@@ -70,7 +68,8 @@ chrome.runtime.onConnect.addListener(port => {
       });
     }
     
-    const fuse = new Fuse([...( pluginsItems.length ? pluginsItems : [...pluginsItemsArray, ...tabs] )], {
+    const search = [...( pluginsItems.length ? pluginsItems : [...tabs, ...pluginsItemsArray] )];
+    const fuse = new Fuse(search, {
       threshold: pluginsItems.length ? 0.75 : 0.45,
       includeMatches: true,
       keys: [
@@ -100,8 +99,8 @@ chrome.runtime.onConnect.addListener(port => {
     });
 
     port.postMessage({
-      items: Object.values(items).flat(),
-      match: pluginsItems.length ? undefined : results?.[0].matches,
+      items: query ? Object.values(items).flat() : search,
+      match: pluginsItems.length ? undefined : results?.[0]?.matches,
     });
   })
 })

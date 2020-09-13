@@ -33,6 +33,7 @@
     suggestion = '';
     searchValue.set('');
     input.focus();
+    search();
   }
 
   function handleKey(e) {
@@ -47,12 +48,12 @@
   }
 
   onMount(() => {
-    input.focus();
-    input.select();
+    setTimeout(() => {
+      input.focus();
+      input.select();
+    }, 100);
 
-    if ($searchValue) {
-      search();
-    }
+    search();
   });
 
 </script>
