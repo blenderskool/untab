@@ -6,7 +6,7 @@
   </p>
 </div>
 
-Most of us have dozens of open tabs, and it quickly becomes cumbersome to manage them efficiently. UnTab is a browser extension that gives you superpowers by making it possible to search through open tabs and perform common actions with just a few strokes. This in turn boosts productivity and makes you look like a hero!
+Most of us have dozens of open tabs, and it quickly becomes cumbersome to manage them efficiently. UnTab is a browser extension that gives you superpowers by making it possible to search through open tabs and perform common actions with just a few keystrokes. This in turn boosts productivity and makes you look like a hero!
 
 Currently, UnTab is being built as a browser extension for Chrome and Chromium based browsers. All features work on Firefox too except for favicons which would be solved in the coming days.
 
