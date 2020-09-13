@@ -13,7 +13,7 @@ async function getTabs() {
   });
 
   return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
-    windowId, title, url, id, favicon: favIconUrl,
+    windowId, title, url, id, favicon: favIconUrl, category: 'Tabs',
   }));
 }
 
@@ -26,7 +26,8 @@ chrome.runtime.onConnect.addListener(port => {
     query = req.data;
 
     const tabs = await getTabs();
-    const pluginsSearch = [];
+    const pluginsItemsArray = [];
+    const pluginsItems = [];
 
     /**
      * Prepare an index of plugins that match the regex
@@ -38,28 +39,39 @@ chrome.runtime.onConnect.addListener(port => {
       }
 
       let items = typeof plugin.item === 'function' ? await plugin.item(query) : plugin.item;
-      items = Array.isArray(items) ? items : [ items ];
+      const isArray = Array.isArray(items);
+
+      if (!isArray) {
+        items = [ items ];
+      }
 
       items.forEach((item) => {
+        if (isArray && pluginsItems.length) return;
+
         const newItem = {};
 
         // Replace the $parameter in the item attributes with the matched groups
         for(const key in item) {
-          newItem[key] = plugin.match && /\$[1-9][0-9]*/g.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
+          newItem[key] = plugin.match && /\$[1-9][0-9]*/.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
         }
 
         item = {
           ...newItem,
           type: constants.PLUGIN,
           name: plugin.name,
+          category: plugin.category || 'Plugins',
         };
 
-        pluginsSearch.push(item);
+        if (isArray) {
+          pluginsItemsArray.push(item);
+        } else {
+          pluginsItems.push(item);
+        }
       });
     }
     
-    const fuse = new Fuse([ ...pluginsSearch, ...tabs ], {
-      threshold: 0.6,
+    const fuse = new Fuse([...( pluginsItems.length ? pluginsItems : [...pluginsItemsArray, ...tabs] )], {
+      threshold: pluginsItems.length ? 0.75 : 0.45,
       includeMatches: true,
       keys: [
         {
@@ -72,8 +84,25 @@ chrome.runtime.onConnect.addListener(port => {
         },
       ],
     });
+    
+    const items = {
+      'Tabs': [],
+      'Plugins': [],
+    };
+    
+    const results = fuse.search(query);
+    results.forEach(({ item }) => {
+      if (!items[item.category]) {
+        items[item.category] = [];
+      }
 
-    port.postMessage(fuse.search(query));
+      items[item.category].push(item);
+    });
+
+    port.postMessage({
+      items: Object.values(items).flat(),
+      match: pluginsItems.length ? undefined : results?.[0].matches,
+    });
   })
 })
 

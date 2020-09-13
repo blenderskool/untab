@@ -11,10 +11,11 @@
   port.onMessage.addListener((response) => {
     results.set(response);
 
-    if (response.length) {
-      const match = response[0].matches[0];
-      const index = match.indices[match.indices.length - 1];
-      suggestion = match.value.substring(index[1] + 1);
+    const { match } = response;
+    if (Array.isArray(match) && match.length) {
+      const firstMatch = match[0];
+      const index = firstMatch.indices[firstMatch.indices.length - 1];
+      suggestion = firstMatch.value.substring(index[1] + 1);
     } else {
       suggestion = '';
     }
@@ -71,7 +72,7 @@
   />
 
   <div class="highlight">
-    <span style="visibility: hidden;">{$searchValue}</span><span>{suggestion}</span>
+    <span style="visibility: hidden;white-space: pre;">{$searchValue}</span><span>{suggestion}</span>
   </div>
 
   {#if $searchValue}

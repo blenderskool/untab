@@ -16,12 +16,12 @@
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        focusedIdx = (focusedIdx + 1) % $results.length;
+        focusedIdx = (focusedIdx + 1) % $results.items.length;
         break;
 
       case 'ArrowUp':
         e.preventDefault();
-        focusedIdx = ($results.length + focusedIdx - 1) % $results.length;
+        focusedIdx = ($results.items.length + focusedIdx - 1) % $results.items.length;
         break;
 
       default:
@@ -35,9 +35,13 @@
 
 <svelte:window on:keydown={handleKeyNav} />
 
-{#if $results.length}
+{#if $results.items.length}
   <ul class="results">
-    {#each $results as { item }, i}
+    {#each $results.items as item, i}
+      {#if i === 0 || item.category !== $results.items[i-1].category}
+        <div class="category">{item.category}</div>
+      {/if}
+
       <Result result={item} isFocused={i === focusedIdx} on:select />
     {/each}
   </ul>
@@ -51,5 +55,14 @@
     overflow-y: auto;
     max-height: 60vh;
     border-top: 1px solid #CECECE;
+  }
+
+  .category {
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 6px 20px;
+    font-size: 12px;
+    color: #718096;
+    letter-spacing: 1px;
   }
 </style>

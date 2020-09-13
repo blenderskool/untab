@@ -60,6 +60,7 @@ export default [
   },
   {
     name: 'history',
+    category: 'History',
     async item(query) {
       const histories = await new Promise(resolve => 
         chrome.history.search({ text: query, maxResults: 40 }, resolve)

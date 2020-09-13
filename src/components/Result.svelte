@@ -46,10 +46,16 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: background-color 0.1s ease;
   }
   li:hover,
   li.is-focused {
     background-color: rgba(99, 179, 237, 0.45);
+    border: 1px solid #63B3ED;
+    border-left: none;
+    border-right: none;
+    padding-top: 11px;
+    padding-bottom: 11px;
   }
 
   .favicon, .favicon-placeholder {
