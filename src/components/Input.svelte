@@ -13,8 +13,8 @@
 
     if (response.length) {
       const match = response[0].matches[0];
-      const index = match.indices[0];
-      suggestion = match.value.substring(index[1]+1);
+      const index = match.indices[match.indices.length - 1];
+      suggestion = match.value.substring(index[1] + 1);
     } else {
       suggestion = '';
     }

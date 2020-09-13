@@ -1,9 +1,15 @@
 <script>
+  import { onDestroy } from 'svelte';
   import Result from './Result.svelte';
 
   import { results } from '../store';
 
   let focusedIdx = 0;
+
+  // Resest focused result to be first result when the results get updated
+  const unsubscribe = results.subscribe(() => {
+    focusedIdx = 0;
+  });
 
   function handleKeyNav(e) {
 
@@ -22,6 +28,8 @@
         break;
     }
   }
+
+  onDestroy(unsubscribe);
 
 </script>
 
