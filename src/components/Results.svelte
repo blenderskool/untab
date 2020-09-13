@@ -45,6 +45,14 @@
       <Result result={item} isFocused={i === focusedIdx} on:select />
     {/each}
   </ul>
+  <footer>
+    <span>
+      {$results.items.length} results
+    </span>
+    <span>
+      ↑ and ↓ to navigate, ↲ to select
+    </span>
+  </footer>
 {/if}
 
 <style>
@@ -54,7 +62,9 @@
     list-style: none;
     overflow-y: auto;
     max-height: 60vh;
-    border-top: 1px solid #CECECE;
+    border: 1px solid #CECECE;
+    border-right: none;
+    border-left: none;
   }
 
   .category {
@@ -64,5 +74,12 @@
     font-size: 12px;
     color: #718096;
     letter-spacing: 1px;
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
   }
 </style>
