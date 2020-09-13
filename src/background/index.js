@@ -1,6 +1,8 @@
 import Fuse from 'fuse.js';
 import constants from '../constants';
 
+let query = '';
+
 /**
  * @returns {Array<Object>} all the currently opened tabs (including tabs from incognito window)
  */
@@ -20,10 +22,12 @@ chrome.runtime.onConnect.addListener(port => {
   port.onMessage.addListener(async (req) => {
     if (!req.data) return;
 
+    query = req.data;
+
     const tabs = await getTabs();
     
     const fuse = new Fuse(tabs, {
-      threshold: 0.7,
+      threshold: 0.6,
       includeMatches: true,
       keys: [
         {
@@ -37,23 +41,20 @@ chrome.runtime.onConnect.addListener(port => {
       ],
     });
 
-    port.postMessage(fuse.search(req.data));
+    port.postMessage(fuse.search(query));
   })
 })
 
 chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
 
   if (req.type === constants.SELECT) {
-    // Delay for fade out transitions to finish
-    await new Promise(resolve => setTimeout(resolve, 101));
-
     const item = req.data;
+    sendResponse();
     chrome.windows.update(item.windowId, { focused: true }, () => 
-      chrome.tabs.update(item.id, { active: true }, sendResponse)
+      chrome.tabs.update(item.id, { active: true })
     );
   }
 
-  return true;
 });
 
 chrome.commands.onCommand.addListener((command) => {
@@ -62,6 +63,7 @@ chrome.commands.onCommand.addListener((command) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
         chrome.tabs.sendMessage(results[0].id, {
           type: constants.OPEN,
+          data: query,
         });
       });
       break;

@@ -2,21 +2,31 @@
   import { createEventDispatcher } from 'svelte';
   import constants from '../constants';
 
-  export let result;
+  export let result, isFocused = false;
+
   let faviconError = false;
+  let element;
 
   const dispatch = createEventDispatcher();
 
-  function handleSelect() {
+  function handleSelect({ key }) {
+    if (key && (key !== 'Enter' || !isFocused)) return;
+
     chrome.runtime.sendMessage({
       type: constants.SELECT,
       data: result,
-    }, () => dispatch('select'));
+    }, () =>dispatch('select'));
+  }
+
+  $: if (isFocused && element) {
+    element.scrollIntoView({ block: 'nearest' });
   }
 
 </script>
 
-<li on:click={handleSelect}>
+<svelte:window on:keydown={handleSelect} />
+
+<li bind:this={element} class:is-focused={isFocused} on:click={handleSelect}>
   {#if result.favicon && !faviconError}
     <img class="favicon" src={result.favicon} alt="" on:error={() => faviconError = true}>
   {:else}
@@ -37,7 +47,8 @@
     align-items: center;
     cursor: pointer;
   }
-  li:hover {
+  li:hover,
+  li.is-focused {
     background-color: rgba(99, 179, 237, 0.45);
   }
 
