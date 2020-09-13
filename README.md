@@ -21,7 +21,7 @@ cd untab
   
 - `dist`: This directory contains the built files from the `src`
 
-- `rollup.confis.js`: Project build configuration is setup using rollup.
+- `rollup.config.js`: Project build configuration is setup using rollup.
 
 ### Build the project
 To install the extension on the browser, first build the project using the following command.
@@ -34,7 +34,7 @@ All the built files are generated in the `dist` directory.
 - Go to the extensions page on your browser. For Chrome and Chromium based browsers go to `chrome://extensions`
 - Turn ON `Developer mode`
 - Click on `Load Unpacked`
-- Select the `dist` folder that was generated after the build step. The extension should now sho up on the list
+- Select the `dist` folder that was generated after the build step. The extension should now show up on the list
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the reload icon next to the installed extension.
 
 ## License 
