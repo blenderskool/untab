@@ -1,6 +1,9 @@
 <div align="center">
   <h1>🔍 UnTab</h1>
   <h2>A productivity tool to boost your browser workflow!</h2>
+  <p>
+    <i><code>Ctrl + Shift + Space</code> and boom :tada:!</i>
+  </p>
 </div>
 
 Most of us have dozens of open tabs, and it quickly becomes cumbersome to manage them efficiently. UnTab is a browser extension that gives you superpowers by making it possible to search through open tabs and perform common actions with just a few strokes. This in turn boosts productivity and makes you look like a hero!
@@ -40,6 +43,7 @@ All the built files are generated in the `dist` directory.
 - Turn ON `Developer mode`
 - Click on `Load Unpacked`
 - Select the `dist` folder that was generated after the build step. The extension should now show up on the list
+- Go to any page and press `Ctrl+Shift+Space` or `Command+Shift+Space` (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the reload icon next to the installed extension.
 
 ## License 
