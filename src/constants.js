@@ -3,4 +3,5 @@ export default {
   TOGGLE_SEARCH: 'toggle-search',
   OPEN: 'open',
   SELECT: 'select',
+  PLUGIN: 'plugin',
 };

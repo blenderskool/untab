@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import plugins from './plugins';
 import constants from '../constants';
 
 let query = '';
@@ -25,8 +26,23 @@ chrome.runtime.onConnect.addListener(port => {
     query = req.data;
 
     const tabs = await getTabs();
+    const pluginsSearch = [];
+
+    /**
+     * Prepare an index of plugins that match the regex
+     */
+    for(const plugin of plugins) {
+      if (!plugin.match.test(query)) continue;
+
+      pluginsSearch.push({
+        ...plugin.item,
+        name: plugin.name,
+        type: constants.PLUGIN,
+      });
+    }
+
     
-    const fuse = new Fuse(tabs, {
+    const fuse = new Fuse([ ...pluginsSearch, ...tabs ], {
       threshold: 0.6,
       includeMatches: true,
       keys: [
@@ -46,10 +62,18 @@ chrome.runtime.onConnect.addListener(port => {
 })
 
 chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
+  if (req.type !== constants.SELECT) return;
 
-  if (req.type === constants.SELECT) {
-    const item = req.data;
-    sendResponse();
+  const item = req.data;
+  sendResponse();
+
+  if (item.type === constants.PLUGIN) {
+    // Plugins are executed by calling their specific handler method
+    plugins
+      .find(plugin => plugin.name === item.name)
+      .handler();
+  } else {
+    // Tab switching
     chrome.windows.update(item.windowId, { focused: true }, () => 
       chrome.tabs.update(item.id, { active: true })
     );
