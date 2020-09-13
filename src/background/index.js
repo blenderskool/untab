@@ -33,14 +33,28 @@ chrome.runtime.onConnect.addListener(port => {
      */
     for(const plugin of plugins) {
       if (!plugin.match.test(query)) continue;
+      plugin.match.lastIndex = 0;
 
-      pluginsSearch.push({
-        ...plugin.item,
-        name: plugin.name,
-        type: constants.PLUGIN,
+      let items = plugin.item;
+      items = Array.isArray(items) ? items : [ items ];
+
+      items.forEach((item) => {
+        const newItem = {};
+
+        // Replace the $parameter in the item attributes with the matched groups
+        for(const key in item) {
+          newItem[key] = /\$[1-9][0-9]*/g.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
+        }
+
+        item = {
+          ...newItem,
+          type: constants.PLUGIN,
+          name: plugin.name,
+        };
+
+        pluginsSearch.push(item);
       });
     }
-
     
     const fuse = new Fuse([ ...pluginsSearch, ...tabs ], {
       threshold: 0.6,
@@ -71,7 +85,7 @@ chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
     // Plugins are executed by calling their specific handler method
     plugins
       .find(plugin => plugin.name === item.name)
-      .handler();
+      .handler(item);
   } else {
     // Tab switching
     chrome.windows.update(item.windowId, { focused: true }, () => 
