@@ -8,7 +8,9 @@ const app = new App({
 function close(e) {
   if (e && e.key && e.key !== 'Escape') return;
 
-  app.$set({ enabled: false });
+  setTimeout(() => {
+    app.$set({ enabled: false });
+  }, 100);
   window.parent.postMessage('', '*');
 }
 

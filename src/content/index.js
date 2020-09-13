@@ -9,8 +9,7 @@ document.body.append(frame);
 chrome.runtime.onMessage.addListener((req) => {
   switch(req.type) {
     case constants.OPEN:
-      frame.style.visibility = 'visible';
-      frame.style.opacity = 1;
+      frame.classList.add('visible');
       break;
   }
 
@@ -20,7 +19,6 @@ chrome.runtime.onMessage.addListener((req) => {
 window.addEventListener('message', (e) => {
   if (frame.contentWindow !== e.source) return;
 
-  frame.style.opacity = 0;
-  frame.style.visibility = 'hidden';
   document.activeElement.blur();
+  frame.classList.remove('visible');
 });

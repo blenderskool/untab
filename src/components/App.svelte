@@ -1,5 +1,4 @@
 <script>
-  import { fade } from 'svelte/transition';
   import Results from './Results.svelte';
   import Input from './Input.svelte';
 
@@ -10,7 +9,7 @@
 </script>
 
 {#if enabled}
-  <div class="search-wrapper" transition:fade="{{ duration: 100 }}">
+  <div class="search-wrapper">
     <div class="search">
 
       <Input />

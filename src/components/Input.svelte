@@ -46,9 +46,12 @@
   }
 
   onMount(() => {
-    setTimeout(() => {
-      input.focus();
-    }, 101);
+    input.focus();
+    input.select();
+
+    if ($searchValue) {
+      search();
+    }
   });
 
 </script>
@@ -104,7 +107,12 @@
     font-size: 1.2rem;
     color: #718096;
     flex: 1;
-    user-select: none;
+    max-width: 87%;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    line-height: 52px;
+    pointer-events: none;
   }
 
   :global(.icon) {
