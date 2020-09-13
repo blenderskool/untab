@@ -32,10 +32,12 @@ chrome.runtime.onConnect.addListener(port => {
      * Prepare an index of plugins that match the regex
      */
     for(const plugin of plugins) {
-      if (!plugin.match.test(query)) continue;
-      plugin.match.lastIndex = 0;
+      if (plugin.match !== undefined && !plugin.match.test(query)) continue;
+      if (plugin.match) {
+        plugin.match.lastIndex = 0;
+      }
 
-      let items = plugin.item;
+      let items = typeof plugin.item === 'function' ? await plugin.item(query) : plugin.item;
       items = Array.isArray(items) ? items : [ items ];
 
       items.forEach((item) => {
@@ -43,7 +45,7 @@ chrome.runtime.onConnect.addListener(port => {
 
         // Replace the $parameter in the item attributes with the matched groups
         for(const key in item) {
-          newItem[key] = /\$[1-9][0-9]*/g.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
+          newItem[key] = plugin.match && /\$[1-9][0-9]*/g.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
         }
 
         item = {

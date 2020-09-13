@@ -57,5 +57,18 @@ export default [
     handler(item) {
       chrome.tabs.create({ active: true, url: item.url });
     }
+  },
+  {
+    name: 'history',
+    async item(query) {
+      const histories = await new Promise(resolve => 
+        chrome.history.search({ text: query, maxResults: 40 }, resolve)
+      );
+      
+      return histories.map(({ title, url }) => ({ title, url, favicon: `chrome://favicon/${url}` }));
+    },
+    handler(item) {
+      chrome.tabs.create({ active: true, url: item.url });
+    }
   }
 ]
