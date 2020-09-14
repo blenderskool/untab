@@ -23,3 +23,7 @@ window.addEventListener('message', ({ data: req }) => {
     searchValue.set(req.data);
   }
 });
+
+window.addEventListener('click', (e) => {
+  if(e.target.className === "search-wrapper svelte-xswngh") close()
+})
