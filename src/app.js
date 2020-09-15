@@ -25,5 +25,5 @@ window.addEventListener('message', ({ data: req }) => {
 });
 
 window.addEventListener('click', (e) => {
-  if(e.target.className.includes("search-wrapper")) close()
+  if(e.target.classList.contains("search-wrapper")) close()
 })
