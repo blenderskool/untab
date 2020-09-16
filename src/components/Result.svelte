@@ -89,4 +89,10 @@
     color: #4A5568;
     margin-top: 4px;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .url {
+      color: #A6ACAF;
+    }
+  }
 </style>

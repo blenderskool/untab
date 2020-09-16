@@ -2,10 +2,13 @@
   import Results from './Results.svelte';
   import Input from './Input.svelte';
 
+  import { getBrowserTheme } from '../theme'
   import { results, searchValue } from '../store';
   import constants from '../constants';
 
   export let enabled = false;
+
+  let theme = getBrowserTheme()
 </script>
 
 {#if enabled}
@@ -61,4 +64,18 @@
       background-color: rgba(255, 255, 255, 0.8);
     }
   }
+
+  @media (prefers-color-scheme: dark) {
+    .search {
+      color: #ddd;
+      background-color: #222;
+    }
+
+    @supports (backdrop-filter: blur(15px) saturate(2)) {
+    .search {
+      backdrop-filter: blur(15px) saturate(2);
+      background-color: rgba(34, 34, 34, 0.8);
+    }
+  }
+}
 </style>
