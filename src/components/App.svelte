@@ -2,13 +2,11 @@
   import Results from './Results.svelte';
   import Input from './Input.svelte';
 
-  import { getBrowserTheme } from '../theme'
   import { results, searchValue } from '../store';
   import constants from '../constants';
 
   export let enabled = false;
 
-  let theme = getBrowserTheme()
 </script>
 
 {#if enabled}
