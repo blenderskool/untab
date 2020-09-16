@@ -61,4 +61,18 @@
       background-color: rgba(255, 255, 255, 0.8);
     }
   }
+
+  @media (prefers-color-scheme: dark) {
+    .search {
+      color: #ddd;
+      background-color: #222;
+    }
+
+    @supports (backdrop-filter: blur(15px) saturate(2)) {
+    .search {
+        backdrop-filter: blur(15px) saturate(2);
+        background-color: rgba(34, 34, 34, 0.8);
+      }
+    }
+  }
 </style>

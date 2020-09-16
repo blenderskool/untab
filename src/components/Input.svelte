@@ -121,4 +121,22 @@
     color: #A0AEC0;
     vertical-align: middle;
   }
+
+  @media (prefers-color-scheme: dark) {
+    :global(.icon) {
+      color:#D6DBDF;
+    }
+
+    .input-wrapper input {
+      color:#FDFEFE;
+    }
+    
+    .input-wrapper input::placeholder {
+    color: #BDC3C7;
+    }
+
+    .highlight {
+      color: #BDC3C7;
+    }
+  }
 </style>

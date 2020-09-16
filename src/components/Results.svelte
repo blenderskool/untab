@@ -82,4 +82,10 @@
     display: flex;
     justify-content: space-between;
   }
+
+  @media (prefers-color-scheme: dark) {
+    .category {
+      color: #E5E8E8;
+    }
+  }
 </style>
