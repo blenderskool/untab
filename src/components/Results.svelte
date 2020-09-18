@@ -6,7 +6,7 @@
 
   let focusedIdx = 0;
 
-  // Resest focused result to be first result when the results get updated
+  // Reset focused result to be first result when the results get updated
   const unsubscribe = results.subscribe(() => {
     focusedIdx = 0;
   });
@@ -16,12 +16,12 @@
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        focusedIdx = (focusedIdx + 1) % $results.items.length;
+        focusedIdx = (focusedIdx + 1) % $results.length;
         break;
 
       case 'ArrowUp':
         e.preventDefault();
-        focusedIdx = ($results.items.length + focusedIdx - 1) % $results.items.length;
+        focusedIdx = ($results.length + focusedIdx - 1) % $results.length;
         break;
 
       default:
@@ -35,19 +35,21 @@
 
 <svelte:window on:keydown={handleKeyNav} />
 
-{#if $results.items.length}
+{#if $results.length}
   <ul class="results">
-    {#each $results.items as item, i}
-      {#if i === 0 || item.category !== $results.items[i-1].category}
-        <div class="category">{item.category}</div>
-      {/if}
+    {#each Object.keys($results.items) as category}
+      <div style="position: relative;">
+        <div class="category">{category}</div>
 
-      <Result result={item} isFocused={i === focusedIdx} on:select />
+        {#each $results.items[category] as item}
+          <Result result={item} isFocused={item.idx === focusedIdx} on:select />
+        {/each}
+      </div>
     {/each}
   </ul>
   <footer>
     <span>
-      {$results.items.length} results
+      {$results.length} results
     </span>
     <span>
       ↑ and ↓ to navigate, ↲ to select
@@ -74,6 +76,9 @@
     font-size: 12px;
     color: #718096;
     letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(240, 240, 240, 0.9);
   }
 
   footer {

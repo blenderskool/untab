@@ -19,7 +19,7 @@
   }
 
   $: if (isFocused && element) {
-    element.scrollIntoView({ block: 'nearest' });
+    element.scrollIntoView({ block: 'center' });
   }
 
 </script>

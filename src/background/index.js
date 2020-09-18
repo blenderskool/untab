@@ -84,13 +84,18 @@ chrome.runtime.onConnect.addListener(port => {
       ],
     });
     
+    /**
+     * Tabs and Plugins are explicity defined here so that
+     * the groups in the results appear in this order
+     */
     const items = {
       'Tabs': [],
       'Plugins': [],
     };
-    
-    const results = fuse.search(query);
-    results.forEach(({ item }) => {
+
+    const results = query ? fuse.search(query) : search;
+    results.forEach((obj) => {
+      const item = query ? obj.item : obj;
       if (!items[item.category]) {
         items[item.category] = [];
       }
@@ -98,8 +103,27 @@ chrome.runtime.onConnect.addListener(port => {
       items[item.category].push(item);
     });
 
+    // Remove empty groups
+    Object.keys(items).forEach((key) => {
+      if (items[key].length) return;
+
+      delete items[key];
+    });
+
+    /**
+     * Assign each result their index when represented in a 1D array.
+     * This is used for keyboard navigation on the UI
+     */
+    Object
+      .values(items)
+      .flat()
+      .forEach((item, i) => {
+        item.idx = i;
+      });
+
     port.postMessage({
-      items: query ? Object.values(items).flat() : search,
+      length: results.length,
+      items,
       match: pluginsItems.length ? undefined : results?.[0]?.matches,
     });
   })
