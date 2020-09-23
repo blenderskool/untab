@@ -1,8 +1,11 @@
 <div align="center">
   <h1>🔍 UnTab</h1>
-  <h2>A productivity tool to boost your browser workflow!</h2>
+  <h3>A productivity tool to boost your browser workflow!</h3>
   <p>
-    <i><code>Ctrl + Shift + Space</code> and boom :tada:!</i>
+    <i><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> and boom :tada:!</i>
+  </p>
+  <p>
+    <a href="https://fossunited.org"><img src="http://fossunited.org/files/fossunited-badge.svg" alt="Supported by FOSS United" /></a>
   </p>
 </div>
 
@@ -43,7 +46,7 @@ All the built files are generated in the `dist` directory.
 - Turn ON `Developer mode`
 - Click on `Load Unpacked`
 - Select the `dist` folder that was generated after the build step. The extension should now show up on the list
-- Go to any page and press `Ctrl+Shift+Space` or `Command+Shift+Space` (on Mac) to open UnTab.
+- Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the reload icon next to the installed extension.
 
 ## License 
