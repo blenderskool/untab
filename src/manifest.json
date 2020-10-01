@@ -11,6 +11,7 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "browser_action": {},
   "commands": {
     "toggle-search": {
       "suggested_key": {

@@ -161,3 +161,12 @@ chrome.commands.onCommand.addListener((command) => {
       break;
   }
 });
+
+chrome.browserAction.onClicked.addListener(function (tab) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
+    chrome.tabs.sendMessage(results[0].id, {
+      type: constants.OPEN,
+      data: query,
+    });
+  });
+});
