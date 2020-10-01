@@ -161,3 +161,10 @@ chrome.commands.onCommand.addListener((command) => {
       break;
   }
 });
+
+chrome.browserAction.onClicked.addListener((tab) => {
+  chrome.tabs.sendMessage(tab.id, {
+    type: constants.OPEN,
+    data: query,
+  });
+});
