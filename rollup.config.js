@@ -1,19 +1,19 @@
-import svelte from "rollup-plugin-svelte";
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
-import copy from "rollup-plugin-copy";
+import svelte from 'rollup-plugin-svelte';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import { terser } from 'rollup-plugin-terser';
+import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default [
   {
-    input: "src/app.js",
+    input: 'src/app.js',
     output: {
       // sourcemap: true,
-      format: "iife",
-      name: "app",
-      file: "dist/untab.js",
+      format: 'iife',
+      name: 'app',
+      file: 'dist/untab.js',
     },
     plugins: [
       svelte({
@@ -21,8 +21,8 @@ export default [
         dev: !production,
         // we'll extract any component CSS out into
         // a separate file - better for performance
-        css: (css) => {
-          css.write("bundle.css");
+        css: css => {
+          css.write('bundle.css');
         },
       }),
 
@@ -33,7 +33,7 @@ export default [
       // https://github.com/rollup/plugins/tree/master/packages/commonjs
       resolve({
         browser: true,
-        dedupe: ["svelte"],
+        dedupe: ['svelte'],
       }),
       commonjs(),
 
@@ -46,11 +46,11 @@ export default [
     },
   },
   {
-    input: "src/content/index.js",
+    input: 'src/content/index.js',
     output: {
-      format: "iife",
-      name: "content",
-      file: "dist/content/content.js",
+      format: 'iife',
+      name: 'content',
+      file: 'dist/content/content.js',
     },
     plugins: [
       resolve({
@@ -60,21 +60,21 @@ export default [
       terser(),
       copy({
         targets: [
-          { src: "src/content/styles.css", dest: "dist/content/" },
-          { src: "src/manifest.json", dest: "dist/" },
-          { src: "src/index.html", dest: "dist/" },
-          { src: "src/fonts/", dest: "dist/" },
-          { src: "src/fonts.css", dest: "dist/" },
+          { src: 'src/content/styles.css', dest: 'dist/content/' },
+          { src: 'src/manifest.json', dest: 'dist/' },
+          { src: 'src/index.html', dest: 'dist/' },
+          { src: 'src/fonts/', dest: 'dist/' },
+          { src: 'src/fonts.css', dest: 'dist/' },
         ],
       }),
     ],
   },
   {
-    input: "src/background/index.js",
+    input: 'src/background/index.js',
     output: {
-      format: "iife",
-      name: "background",
-      file: "dist/background.js",
+      format: 'iife',
+      name: 'background',
+      file: 'dist/background.js',
     },
     plugins: [
       resolve({
