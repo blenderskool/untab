@@ -33,9 +33,9 @@
     <span class="favicon-placeholder" />
   {/if}
 
-  <div class="info" title={result.title}>
-    <h4 class="title">{result.title}</h4>
-    <p class="url">{result.url}</p>
+  <div class="info" title={result.title}> 
+    <h4 class="title">{result.title}</h4> 
+    <p class="url" style={!result.title ? "margin-top:0" : ""}>{result.url}</p>
   </div>
 </li>
 
