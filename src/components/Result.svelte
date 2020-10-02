@@ -35,11 +35,7 @@
 
   <div class="info" title={result.title}> 
     <h4 class="title">{result.title}</h4> 
-    {#if result.title}
-    <p class="url">{result.url}</p>
-    {:else}
-    <p class="url-2">{result.url}</p>
-    {/if}
+    <p class="url" style={!result.title ? "margin-top:0" : ""}>{result.url}</p>
   </div>
 </li>
 
@@ -92,10 +88,5 @@
     font-size: 12px;
     color: #4A5568;
     margin-top: 4px;
-  }
-
-  .url-2{
-    font-size: 12px;
-    color: #4A5568;
   }
 </style>
