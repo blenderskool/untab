@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import Fuse from './fuse';
 import plugins from './plugins';
 import constants from '../constants';
 
@@ -76,8 +76,7 @@ function groupItems(items, groups = []) {
     return obj;
   }, {});
 
-  items.forEach((obj) => {
-    const item = search.query ? obj.item : obj;
+  items.forEach(({ item }) => {
     if (!results[item.category]) {
       results[item.category] = [];
     }
@@ -142,7 +141,7 @@ async function searchData({ data }) {
     ],
   });
 
-  const results = search.query ? fuse.search(search.query) : searchIndex;
+  const results = fuse.search(search.query);
 
   return {
     length: results.length,
@@ -185,7 +184,7 @@ async function searchPluginItems({ data }) {
     ],
   });
 
-  const results = search.query ? fuse.search(search.query) : pluginsItems;
+  const results = fuse.search(search.query);
 
   return {
     length: results.length,
