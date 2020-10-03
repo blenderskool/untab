@@ -1,8 +1,8 @@
 <script>
   import Results from './Results.svelte';
-  import Input from './Input.svelte';
+  import Input from './Input/Input.svelte';
 
-  import { results, searchValue } from '../store';
+  import { results, inputState } from '../store';
   import constants from '../constants';
 
   export let enabled = false;
@@ -14,7 +14,9 @@
 
       <Input />
 
-      <Results on:select />
+      {#if $inputState !== 'plugin'}
+        <Results on:select />
+      {/if}
     </div>
   </div>
 {/if}
@@ -51,7 +53,6 @@
     min-height: 50px;
     max-height: 80vh;
     border-radius: 5px;
-    overflow: hidden;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
