@@ -13,7 +13,7 @@ export default [
       // sourcemap: true,
       format: 'iife',
       name: 'app',
-      file: 'dist/untab.js'
+      file: 'dist/untab.js',
     },
     plugins: [
       svelte({
@@ -23,7 +23,7 @@ export default [
         // a separate file - better for performance
         css: css => {
           css.write('bundle.css');
-        }
+        },
       }),
 
       // If you have external dependencies installed from
@@ -33,28 +33,28 @@ export default [
       // https://github.com/rollup/plugins/tree/master/packages/commonjs
       resolve({
         browser: true,
-        dedupe: ['svelte']
+        dedupe: ['svelte'],
       }),
       commonjs(),
 
       // If we're building for production (npm run build
       // instead of npm run dev), minify
-      production && terser()
+      production && terser(),
     ],
     watch: {
-      clearScreen: false
-    }
+      clearScreen: false,
+    },
   },
   {
     input: 'src/content/index.js',
     output: {
       format: 'iife',
       name: 'content',
-      file: 'dist/content/content.js'
+      file: 'dist/content/content.js',
     },
     plugins: [
       resolve({
-        browser: true
+        browser: true,
       }),
       commonjs(),
       terser(),
@@ -62,24 +62,26 @@ export default [
         targets: [
           { src: 'src/content/styles.css', dest: 'dist/content/' },
           { src: 'src/manifest.json', dest: 'dist/' },
-          { src: 'src/index.html', dest: 'dist/' }
-        ]
-      })
-    ]
+          { src: 'src/index.html', dest: 'dist/' },
+          { src: 'src/fonts/', dest: 'dist/' },
+          { src: 'src/fonts.css', dest: 'dist/' },
+        ],
+      }),
+    ],
   },
   {
     input: 'src/background/index.js',
     output: {
       format: 'iife',
       name: 'background',
-      file: 'dist/background.js'
+      file: 'dist/background.js',
     },
     plugins: [
       resolve({
-        browser: true
+        browser: true,
       }),
       commonjs(),
       terser(),
     ],
-  }
+  },
 ];
