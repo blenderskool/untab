@@ -3,37 +3,18 @@
   import Result from './Result.svelte';
 
   import { results } from '../store';
+  import keyNavArray from '../utils/keyNavArray';
 
-  let focusedIdx = 0;
+  let focusedIdx;
 
   // Reset focused result to be first result when the results get updated
   const unsubscribe = results.subscribe(() => {
-    focusedIdx = 0;
+    focusedIdx = keyNavArray($results);
   });
-
-  function handleKeyNav(e) {
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        focusedIdx = (focusedIdx + 1) % $results.length;
-        break;
-
-      case 'ArrowUp':
-        e.preventDefault();
-        focusedIdx = ($results.length + focusedIdx - 1) % $results.length;
-        break;
-
-      default:
-        break;
-    }
-  }
 
   onDestroy(unsubscribe);
 
 </script>
-
-<svelte:window on:keydown={handleKeyNav} />
 
 {#if $results.length}
   <ul class="results">
@@ -42,7 +23,7 @@
         <div class="category">{category}</div>
 
         {#each $results.items[category] as item}
-          <Result result={item} isFocused={item.idx === focusedIdx} on:select />
+          <Result result={item} isFocused={item.idx === $focusedIdx} on:select />
         {/each}
       </div>
     {/each}
