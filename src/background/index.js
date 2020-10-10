@@ -38,6 +38,8 @@ async function getTabs() {
  */
 async function preprocessPluginItems(name) {
   const plugin = plugins[name];
+  if (!plugin) return [];
+
   let items = typeof plugin.item === 'function' ? await plugin.item(search.query) : plugin.item;
   items = Array.isArray(items) ? items : [ items ];
 
