@@ -81,4 +81,23 @@ export default {
       chrome.tabs.create({ active: true, url: item.url });
     }
   },
+  'bookmarks': {
+    async item(query) {
+      const bookmarkTreeNodes = await new Promise(resolve => 
+        chrome.bookmarks.search(query, resolve)
+      );
+
+      return bookmarkTreeNodes
+        .filter(({ url }) => !!url) // We avoid adding the bookmarkTreeNode to the list if it is a folder
+        .map(({ title, url }) => ({
+          title,
+          url,
+          favicon: `chrome://favicon/${url}`,
+          category: 'Bookmarks'
+        }));
+    },
+    handler(item) {
+      chrome.tabs.create({ active: true, url: item.url });
+    }
+  }
 };
