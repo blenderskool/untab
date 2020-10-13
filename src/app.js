@@ -1,6 +1,6 @@
 import App from './components/App.svelte';
 import constants from './constants';
-import { searchValue } from './store';
+import { searchVal, inputState } from './store';
 
 const app = new App({
   target: document.body,
@@ -20,7 +20,12 @@ app.$on('select', close);
 window.addEventListener('message', ({ data: req }) => {
   if (req.type === constants.OPEN) {
     app.$set({ enabled: true });
-    searchValue.set(req.data);
+    searchVal.set(req.data);
+
+    if (req.data.plugin.name) {
+      inputState.send('PLUGIN');
+      inputState.send('TEXT');
+    }
   }
 });
 

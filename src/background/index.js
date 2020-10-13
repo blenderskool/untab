@@ -1,11 +1,25 @@
-import Fuse from 'fuse.js';
+import Fuse from './fuse';
 import plugins from './plugins';
 import constants from '../constants';
 
-let query = '';
+let search = {
+  query: '',
+  plugin: {},
+};
+
+const pluginIndex = new Fuse(
+  Object
+    .entries(plugins)
+    .filter(([,plugin]) => plugin.keys?.length)
+    .map(([name, { keys, displayName }]) => ({ name, keys, displayName })),
+  {
+    threshold: 0.4,
+    keys: ['keys', 'displayName'],
+  }
+);
 
 /**
- * @returns {Array<Object>} all the currently opened tabs (including tabs from incognito window)
+ * @returns {Promise<Array>} all the currently opened tabs (including tabs from incognito window)
  */
 async function getTabs() {
   const tabs = await new Promise(resolve => {
@@ -17,117 +31,191 @@ async function getTabs() {
   }));
 }
 
+/**
+ * Preprocesses the items from a plugin making it ready for search indexing
+ * @param {String} name Unique name of the plugin
+ * @returns {Promise<Array>} processed plugin items
+ */
+async function preprocessPluginItems(name) {
+  const plugin = plugins[name];
+  if (!plugin) return [];
+
+  let items = typeof plugin.item === 'function' ? await plugin.item(search.query) : plugin.item;
+  items = Array.isArray(items) ? items : [ items ];
+
+  return items.map((item) => {
+    const newItem = {};
+
+    // Replace the $parameter in the item attributes with the matched groups
+    for(const key in item) {
+      newItem[key] = plugin.match && /\$[1-9][0-9]*/.test(item[key])
+        ? search.query.replace(plugin.match, item[key])
+        : item[key];
+    }
+
+    return {
+      ...newItem,
+      name,
+      type: constants.PLUGIN,
+      category: item.category || 'Plugins',
+    };
+  });
+}
+
+/**
+ * Groups an array of items based on their `category` key
+ * @param {Array<Object>} items Items to be grouped 
+ * @param {Array<String>} groups Explicit ordering of groups in the results
+ * @returns {Object} key as the group name and value as array of items in that group
+ */
+function groupItems(items, groups = []) {
+  /**
+   * Groups are explicity created here to define
+   * the order of categories in the final result
+   */
+  const results = groups.reduce((obj, grp) => {
+    obj[grp] = [];
+    return obj;
+  }, {});
+
+  items.forEach(({ item }) => {
+    if (!results[item.category]) {
+      results[item.category] = [];
+    }
+
+    results[item.category].push(item);
+  });
+
+  // Remove empty groups
+  Object.keys(results).forEach((key) => {
+    if (results[key].length) return;
+
+    delete results[key];
+  });
+
+  /**
+   * Assign each result their index when represented in a 1D array.
+   * This is used for keyboard navigation on the UI
+   */
+  Object
+    .values(results)
+    .flat()
+    .forEach((item, i) => {
+      item.idx = i;
+    });
+
+  return results;
+}
+
+async function searchData({ data }) {
+  search = data;
+  const tabs = await getTabs();
+
+  /**
+   * Prepare an index of plugins that match the regex
+   */
+  const pluginsItems = (await Promise.all(
+    Object
+      .entries(plugins)
+      .filter(([,plugin]) => !(plugin.keys || plugin.match !== undefined && !plugin.match.test(search.query)))
+      .map(([name, plugin]) => {
+        if (plugin.match) {
+          plugin.match.lastIndex = 0;
+        }
+
+        return preprocessPluginItems(name);
+      })
+  )).flat();
+  
+  const searchIndex = [...tabs, ...pluginsItems];
+  const fuse = new Fuse(searchIndex, {
+    threshold: 0.45,
+    includeMatches: true,
+    keys: [
+      {
+        name: 'title',
+        weight: 0.9,
+      },
+      {
+        name: 'url',
+        weight: 0.7,
+      },
+    ],
+  });
+
+  const results = fuse.search(search.query);
+
+  return {
+    length: results.length,
+    items: groupItems(results, [ 'Tabs', 'Plugins' ]),
+    match: results?.[0]?.matches,
+  };
+}
+
+function searchPlugins({ data }) {
+  const query = data.query.substring(1);
+
+  const results = pluginIndex.search(query);
+  const items = results.reduce((obj, { item }) => {
+    obj[item.name] = item;
+    return obj;
+  }, {});
+  
+  return {
+    length: results.length,
+    items,
+  };
+}
+
+async function searchPluginItems({ data }) {
+  search = data;
+  const pluginsItems = await preprocessPluginItems(data.plugin.name);
+
+  const fuse = new Fuse(pluginsItems, {
+    threshold: 0.75,
+    includeMatches: true,
+    keys: [
+      {
+        name: 'title',
+        weight: 0.9,
+      },
+      {
+        name: 'url',
+        weight: 0.7,
+      },
+    ],
+  });
+
+  const results = fuse.search(search.query);
+
+  return {
+    length: results.length,
+    items: groupItems(results, [ 'Plugins' ]),
+    match: results?.[0]?.matches,
+  };
+}
+
 chrome.runtime.onConnect.addListener(port => {
   if (port.name !== constants.SEARCH_PORT) return;
 
   port.onMessage.addListener(async (req) => {
-    query = req.data;
 
-    const tabs = await getTabs();
-    const pluginsItemsArray = [];
-    const pluginsItems = [];
-
-    /**
-     * Prepare an index of plugins that match the regex
-     */
-    for(const plugin of plugins) {
-      if (plugin.match !== undefined && !plugin.match.test(query)) continue;
-      if (plugin.match) {
-        plugin.match.lastIndex = 0;
-      }
-
-      let items = typeof plugin.item === 'function' ? await plugin.item(query) : plugin.item;
-      const isArray = Array.isArray(items);
-
-      if (!isArray) {
-        items = [ items ];
-      }
-
-      items.forEach((item) => {
-        if (isArray && pluginsItems.length) return;
-
-        const newItem = {};
-
-        // Replace the $parameter in the item attributes with the matched groups
-        for(const key in item) {
-          newItem[key] = plugin.match && /\$[1-9][0-9]*/.test(item[key]) ? query.replace(plugin.match, item[key]) : item[key];
-        }
-
-        item = {
-          ...newItem,
-          type: constants.PLUGIN,
-          name: plugin.name,
-          category: plugin.category || 'Plugins',
-        };
-
-        if (isArray) {
-          pluginsItemsArray.push(item);
-        } else {
-          pluginsItems.push(item);
-        }
-      });
+    let results;
+    switch(req.type) {
+      case constants.SEARCH_TYPE_PLUGINS:
+        results = searchPlugins(req);
+        break;
+      case constants.SEARCH_TYPE_PLUGIN:
+        results = await searchPluginItems(req);
+        break;
+      case constants.SEARCH_TYPE_FULL:
+        results = await searchData(req);
+        break;
     }
-    
-    const search = [...( pluginsItems.length ? pluginsItems : [...tabs, ...pluginsItemsArray] )];
-    const fuse = new Fuse(search, {
-      threshold: pluginsItems.length ? 0.75 : 0.45,
-      includeMatches: true,
-      keys: [
-        {
-          name: 'title',
-          weight: 0.9,
-        },
-        {
-          name: 'url',
-          weight: 0.7,
-        },
-      ],
-    });
-    
-    /**
-     * Tabs and Plugins are explicity defined here so that
-     * the groups in the results appear in this order
-     */
-    const items = {
-      'Tabs': [],
-      'Plugins': [],
-    };
 
-    const results = query ? fuse.search(query) : search;
-    results.forEach((obj) => {
-      const item = query ? obj.item : obj;
-      if (!items[item.category]) {
-        items[item.category] = [];
-      }
-
-      items[item.category].push(item);
-    });
-
-    // Remove empty groups
-    Object.keys(items).forEach((key) => {
-      if (items[key].length) return;
-
-      delete items[key];
-    });
-
-    /**
-     * Assign each result their index when represented in a 1D array.
-     * This is used for keyboard navigation on the UI
-     */
-    Object
-      .values(items)
-      .flat()
-      .forEach((item, i) => {
-        item.idx = i;
-      });
-
-    port.postMessage({
-      length: results.length,
-      items,
-      match: pluginsItems.length ? undefined : results?.[0]?.matches,
-    });
-  })
-})
+    port.postMessage(results);
+  });
+});
 
 chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
   if (req.type !== constants.SELECT) return;
@@ -137,9 +225,7 @@ chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
 
   if (item.type === constants.PLUGIN) {
     // Plugins are executed by calling their specific handler method
-    plugins
-      .find(plugin => plugin.name === item.name)
-      .handler(item);
+    plugins[item.name].handler(item);
   } else {
     // Tab switching
     chrome.windows.update(item.windowId, { focused: true }, () => 
@@ -155,7 +241,7 @@ chrome.commands.onCommand.addListener((command) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
         chrome.tabs.sendMessage(results[0].id, {
           type: constants.OPEN,
-          data: query,
+          data: search,
         });
       });
       break;

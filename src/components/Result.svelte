@@ -15,7 +15,7 @@
     chrome.runtime.sendMessage({
       type: constants.SELECT,
       data: result,
-    }, () =>dispatch('select'));
+    }, () => dispatch('select'));
   }
 
   $: if (isFocused && element) {
