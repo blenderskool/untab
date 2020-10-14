@@ -64,6 +64,22 @@ export default {
       chrome.tabs.create({ active: true, url: item.url });
     }
   },
+  'visit-url': {
+    displayName: 'Visit URL',
+    match: /^(https?:\/\/)?([\w]+\.)+[A-Za-z]{2,24}(\/[\w\/&.=?-]*)?$/,
+    async item(query) {
+      const url = /^https?:\/\//.exec(query) ? query : `https://${query}`;
+      return {
+        favicon: `chrome://favicon/${query}`,
+        title: `Visit ${query}`,
+        url,
+        category: 'Visit URL'
+      }
+    },
+    handler(item) {
+      chrome.tabs.create({ active: true, url: item.url });
+    }
+  },
   'history': {
     async item(query) {
       const histories = await new Promise(resolve => 
