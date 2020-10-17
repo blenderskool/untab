@@ -64,6 +64,20 @@ export default {
       chrome.tabs.create({ active: true, url: item.url });
     }
   },
+  'open-url': {
+    match: /^(https?:\/\/)?([\w]+\.)+[A-Za-z]{2,24}(\/[\w\/&.=?-]*)?$/,
+    async item(query) {
+      const url = /^https?:\/\//.exec(query) ? query : `https://${query}`;
+      return {
+        favicon: `chrome://favicon/${url}`,
+        title: `Open ${query} in new tab`,
+        url,
+      }
+    },
+    handler(item) {
+      chrome.tabs.create({ active: true, url: item.url });
+    }
+  },
   'history': {
     async item(query) {
       const histories = await new Promise(resolve => 
