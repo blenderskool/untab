@@ -251,6 +251,6 @@ chrome.commands.onCommand.addListener((command) => {
 chrome.browserAction.onClicked.addListener((tab) => {
   chrome.tabs.sendMessage(tab.id, {
     type: constants.OPEN,
-    data: query,
+    data: search.query,
   });
 });

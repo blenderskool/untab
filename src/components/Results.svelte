@@ -8,12 +8,13 @@
   let focusedIdx;
 
   // Reset focused result to be first result when the results get updated
+  let flag = false;
   const unsubscribe = results.subscribe(() => {
     focusedIdx = keyNavArray($results);
+    flag = $results.length>1?true:false;
   });
 
   onDestroy(unsubscribe);
-
 </script>
 
 {#if $results.length}
@@ -30,7 +31,7 @@
   </ul>
   <footer>
     <span>
-      {$results.length} results
+      {$results.length} {#if flag } results {:else} result{/if}
     </span>
     <span>
       ↑ and ↓ to navigate, ↲ to select
