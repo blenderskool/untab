@@ -217,40 +217,50 @@ chrome.runtime.onConnect.addListener(port => {
   });
 });
 
-chrome.runtime.onMessage.addListener(async (req, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   if (req.type !== constants.SELECT) return;
 
   const item = req.data;
-  sendResponse();
 
   if (item.type === constants.PLUGIN) {
-    // Plugins are executed by calling their specific handler method
-    plugins[item.name].handler(item);
+    const sendResponseCB = (data = {}) => sendResponse({ autoClose: true, ...data });
+    /**
+     * Plugins are executed by calling their specific handler method
+     * handler is passed item object that was selected,
+     * sendResponse callback to indicate it has finished handling the task.
+     */
+    plugins[item.name].handler(item, sendResponseCB);
   } else {
     // Tab switching
     chrome.windows.update(item.windowId, { focused: true }, () => 
-      chrome.tabs.update(item.id, { active: true })
+      chrome.tabs.update(item.id, { active: true }, () => sendResponse())
     );
   }
 
+  return true;
 });
 
-chrome.commands.onCommand.addListener((command) => {
+async function triggerOpen(tab) {
+  const [results, storage] = await Promise.all([
+    tab ? [ tab ] : new Promise(resolve => chrome.tabs.query({ active: true, currentWindow: true }, resolve)),
+    new Promise(resolve => chrome.storage.local.get(null, resolve)),
+  ]);
+
+  chrome.tabs.sendMessage(results[0].id, {
+    type: constants.OPEN,
+    data: {
+      storage,
+      ...search,
+    },
+  });
+}
+
+chrome.commands.onCommand.addListener(async (command) => {
   switch (command) {
     case constants.TOGGLE_SEARCH:
-      chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
-        chrome.tabs.sendMessage(results[0].id, {
-          type: constants.OPEN,
-          data: search,
-        });
-      });
+      await triggerOpen();
       break;
   }
 });
 
-chrome.browserAction.onClicked.addListener((tab) => {
-  chrome.tabs.sendMessage(tab.id, {
-    type: constants.OPEN,
-    data: query,
-  });
-});
+chrome.browserAction.onClicked.addListener(async (tab) => await triggerOpen(tab));
