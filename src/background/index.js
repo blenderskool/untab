@@ -19,19 +19,6 @@ const pluginIndex = new Fuse(
 );
 
 /**
- * @returns {Promise<Array>} all the currently opened tabs (including tabs from incognito window)
- */
-async function getTabs() {
-  const tabs = await new Promise(resolve => {
-    chrome.tabs.query({}, resolve);
-  });
-
-  return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
-    windowId, title, url, id, favicon: favIconUrl, category: 'Tabs',
-  }));
-}
-
-/**
  * Preprocesses the items from a plugin making it ready for search indexing
  * @param {String} name Unique name of the plugin
  * @returns {Promise<Array>} processed plugin items
@@ -109,7 +96,6 @@ function groupItems(items, groups = []) {
 
 async function searchData({ data }) {
   search = data;
-  const tabs = await getTabs();
 
   /**
    * Prepare an index of plugins that match the regex
@@ -127,7 +113,7 @@ async function searchData({ data }) {
       })
   )).flat();
   
-  const searchIndex = [...tabs, ...pluginsItems];
+  const searchIndex = pluginsItems;
   const fuse = new Fuse(searchIndex, {
     threshold: 0.45,
     includeMatches: true,
@@ -230,11 +216,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
      * sendResponse callback to indicate it has finished handling the task.
      */
     plugins[item.name].handler(item, sendResponseCB);
-  } else {
-    // Tab switching
-    chrome.windows.update(item.windowId, { focused: true }, () => 
-      chrome.tabs.update(item.id, { active: true }, () => sendResponse())
-    );
   }
 
   return true;

@@ -1,4 +1,27 @@
 export default {
+  'tabs': {
+    async item() {
+      const tabs = await new Promise(resolve => {
+        chrome.tabs.query({}, resolve);
+      });
+
+      return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
+        id,
+        windowId,
+        title,
+        url,
+        favicon: favIconUrl,
+        category: 'Tabs',
+      }));
+    },
+    handler(item, sendResponse) {
+      chrome.windows.update(
+        item.windowId,
+        { focused: true },
+        () => chrome.tabs.update(item.id, { active: true }, () => sendResponse()),
+      );
+    }
+  },
   'tab-actions': {
     displayName: 'Tab actions',
     keys: [ 't', 'tab' ],
