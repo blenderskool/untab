@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { searchVal, storedKeys } from '../store';
+  import { storedKeys } from '../store';
   import constants from '../constants';
 
   export let result, isFocused = false;
@@ -21,8 +21,6 @@
 
       if (autoClose !== false) {
         dispatch('select');
-      } else {
-        searchVal.update(obj => obj);
       }
     });
   }
