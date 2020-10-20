@@ -64,7 +64,7 @@ export default [
           { src: 'src/manifest.json', dest: 'dist/' },
           { src: 'src/index.html', dest: 'dist/' },
           { src: 'src/fonts/', dest: 'dist/' },
-          { src: 'src/fonts.css', dest: 'dist/' },
+          { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
         ],
       }),
     ],
