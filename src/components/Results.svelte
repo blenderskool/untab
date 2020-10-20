@@ -45,9 +45,19 @@
     list-style: none;
     overflow-y: auto;
     max-height: 60vh;
-    border: 1px solid #CECECE;
+    border: 1px solid var(--border-col);
     border-right: none;
     border-left: none;
+  }
+
+  .results::-webkit-scrollbar {
+    width: 6px;
+    background-color: var(--border-col);
+  }
+
+  .results::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: var(--blue-400-45);
   }
 
   .category {
@@ -55,11 +65,11 @@
     font-weight: 600;
     padding: 6px 20px;
     font-size: 12px;
-    color: #718096;
+    color: var(--gray-600);
     letter-spacing: 1px;
     position: sticky;
     top: 0;
-    background-color: rgba(240, 240, 240, 0.9);
+    background-color: var(--gray-300-90);
   }
 
   footer {

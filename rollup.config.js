@@ -65,6 +65,7 @@ export default [
           { src: 'src/index.html', dest: 'dist/' },
           { src: 'src/fonts/', dest: 'dist/' },
           { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
+          { src: 'src/themes/themes.css', dest: 'dist/themes/' },
         ],
       }),
     ],

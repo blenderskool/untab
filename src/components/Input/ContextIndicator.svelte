@@ -16,7 +16,7 @@
 <style>
   .plugin {
     white-space: nowrap;
-    background-color: rgba(92, 111, 125, 0.2);
+    background-color: rgba(149, 149, 149, 0.2);
     border-radius: 4px;
     padding: 8px;
     font-weight: 600;

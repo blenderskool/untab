@@ -2,14 +2,14 @@
   import Results from './Results.svelte';
   import Input from './Input/Input.svelte';
 
-  import { results, inputState } from '../store';
+  import { results, inputState, storedKeys } from '../store';
   import constants from '../constants';
 
   export let enabled = false;
 </script>
 
 {#if enabled}
-  <div class="search-wrapper">
+  <div class={`search-wrapper ${$storedKeys.theme || ''}`}>
     <div class="search">
 
       <Input />
@@ -24,7 +24,6 @@
 <style>
   :global(body) {
     font-size: 16px;
-    color: #2D3748;
   }
 
   :global(*) {
@@ -42,10 +41,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: var(--gray-800);
   }
 
   .search {
-    background-color: #fff;
+    background-color: var(--bg-80);
     position: relative;
     top: 90px;
     width: 75%;
@@ -59,7 +59,6 @@
   @supports (backdrop-filter: blur(15px) saturate(2)) {
     .search {
       backdrop-filter: blur(15px) saturate(2);
-      background-color: rgba(255, 255, 255, 0.8);
     }
   }
 </style>
