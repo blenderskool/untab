@@ -161,6 +161,12 @@ export default {
         url: '',
         emoji: '☕',
         theme: 'coffee',
+      },
+      {
+        title: 'Spearmint',
+        url: '',
+        emoji: '🌿',
+        theme: 'spearmint',
       }
     ],
     handler({ theme }, sendResponse) {
