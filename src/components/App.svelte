@@ -9,7 +9,7 @@
 </script>
 
 {#if enabled}
-  <div class={`search-wrapper ${$storedKeys.theme || ''}`}>
+  <div class={`search-wrapper ${$storedKeys.theme ? 'theme-'+$storedKeys.theme : ''}`}>
     <div class="search">
 
       <Input />
