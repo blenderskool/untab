@@ -1,6 +1,6 @@
 import App from './components/App.svelte';
 import constants from './constants';
-import { searchVal, inputState } from './store';
+import { searchVal, inputState, storedKeys } from './store';
 
 const app = new App({
   target: document.body,
@@ -20,7 +20,12 @@ app.$on('select', close);
 window.addEventListener('message', ({ data: req }) => {
   if (req.type === constants.OPEN) {
     app.$set({ enabled: true });
-    searchVal.set(req.data);
+
+    storedKeys.set(req.data.storage);
+    searchVal.set({
+      query: req.data.query,
+      plugin: req.data.plugin,
+    });
 
     if (req.data.plugin.name) {
       inputState.send('PLUGIN');

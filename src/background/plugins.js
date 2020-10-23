@@ -1,38 +1,64 @@
 export default {
-  'tab': {
-    displayName: 'Tab',
+  'tabs': {
+    async item() {
+      const tabs = await new Promise(resolve => {
+        chrome.tabs.query({}, resolve);
+      });
+
+      return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
+        id,
+        windowId,
+        title,
+        url,
+        favicon: favIconUrl,
+        category: 'Tabs',
+      }));
+    },
+    handler(item, sendResponse) {
+      chrome.windows.update(
+        item.windowId,
+        { focused: true },
+        () => chrome.tabs.update(item.id, { active: true }, () => sendResponse()),
+      );
+    }
+  },
+  'tab-actions': {
+    displayName: 'Tab actions',
     keys: [ 't', 'tab' ],
     item: [
       {
         key: 'back',
         title: 'Back navigate',
         url: '',
+        emoji: '⬅️',
         category: 'Current Tab',
       },
       {
         key: 'forward',
         title: 'Forward navigate',
         url: '',
+        emoji: '➡️',
         category: 'Current Tab',
       },
       {
         key: 'close',
         title: 'Close Tab',
         url: '',
+        emoji: '❌',
         category: 'Current Tab',
       },
     ],
-    handler(item) {
+    handler(item, sendResponse) {
       switch(item.key) {
         case 'back':
-          chrome.tabs.goBack();
+          chrome.tabs.goBack(null, sendResponse);
           break;
         case 'forward':
-          chrome.tabs.goForward();
+          chrome.tabs.goForward(null, sendResponse);
           break;
         case 'close':
           chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
-            chrome.tabs.remove(results[0].id);
+            chrome.tabs.remove(results[0].id, sendResponse);
           });
           break;
       }
@@ -47,8 +73,8 @@ export default {
       title: 'Search Google for $1',
       url: 'https://www.google.com/search?q=$1',
     },
-    handler(item) {
-      chrome.tabs.create({ active: true, url: item.url });
+    handler(item, sendResponse) {
+      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
     }
   },
   'duckduckgo-search': {
@@ -60,8 +86,8 @@ export default {
       title: 'Search DuckDuckGo for $1',
       url: 'https://duckduckgo.com?q=$1',
     },
-    handler(item) {
-      chrome.tabs.create({ active: true, url: item.url });
+    handler(item, sendResponse) {
+      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
     }
   },
   'open-url': {
@@ -74,8 +100,8 @@ export default {
         url,
       }
     },
-    handler(item) {
-      chrome.tabs.create({ active: true, url: item.url });
+    handler(item, sendResponse) {
+      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
     }
   },
   'history': {
@@ -91,8 +117,8 @@ export default {
         category: 'History',
       }));
     },
-    handler(item) {
-      chrome.tabs.create({ active: true, url: item.url });
+    handler(item, sendResponse) {
+      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
     }
   },
   'bookmarks': {
@@ -110,8 +136,43 @@ export default {
           category: 'Bookmarks'
         }));
     },
-    handler(item) {
-      chrome.tabs.create({ active: true, url: item.url });
+    handler(item, sendResponse) {
+      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    }
+  },
+  'themes': {
+    keys: ['dark', 'themes', 'mode', 'light'],
+    displayName: '🎨 Themes',
+    item: [
+      {
+        title: 'Dark',
+        url: '',
+        emoji: '🌒',
+        theme: 'dark',
+      },
+      {
+        title: 'Light',
+        url: '',
+        emoji: '☀️',
+        theme: 'light',
+      },
+      {
+        title: 'Coffee',
+        url: '',
+        emoji: '☕',
+        theme: 'coffee',
+      },
+      {
+        title: 'Spearmint',
+        url: '',
+        emoji: '🌿',
+        theme: 'spearmint',
+      }
+    ],
+    handler({ theme }, sendResponse) {
+      chrome.storage.local.set({ theme }, () => {
+        sendResponse({ theme, autoClose: false });
+      });
     }
   }
 };

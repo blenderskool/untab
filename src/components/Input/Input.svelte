@@ -176,10 +176,10 @@
     border: none;
     outline: none;
     font-size: 1.2rem;
-    color: #2D3748;
+    color: var(--gray-800);
   }
   .input-wrapper input::placeholder {
-    color: #718096;
+    color: var(--gray-600);
   }
 
   .highlight {
@@ -199,7 +199,7 @@
   .highlight .text {
     white-space: pre;
     font-size: 1.2rem;
-    color: #718096;
+    color: var(--gray-600);
     line-height: 52px;
     pointer-events: none;
   }
@@ -215,7 +215,7 @@
   }
 
   :global(.icon) {
-    color: #A0AEC0;
+    color: var(--gray-500);
     vertical-align: middle;
   }
 </style>

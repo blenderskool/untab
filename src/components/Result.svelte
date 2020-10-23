@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { storedKeys } from '../store';
   import constants from '../constants';
 
   export let result, isFocused = false;
@@ -15,7 +16,13 @@
     chrome.runtime.sendMessage({
       type: constants.SELECT,
       data: result,
-    }, () => dispatch('select'));
+    }, ({ autoClose, ...storage }) => {
+      storedKeys.update((obj) => ({ ...obj, ...storage }));
+
+      if (autoClose !== false) {
+        dispatch('select');
+      }
+    });
   }
 
   $: if (isFocused && element) {
@@ -29,6 +36,8 @@
 <li bind:this={element} class:is-focused={isFocused} on:click={handleSelect}>
   {#if result.favicon && !faviconError}
     <img class="favicon" src={result.favicon} alt="" on:error={() => faviconError = true}>
+  {:else if result.emoji}
+    <span class="emoji">{result.emoji}</span>
   {:else}
     <span class="favicon-placeholder" />
   {/if}
@@ -50,15 +59,19 @@
   }
   li:hover,
   li.is-focused {
-    background-color: rgba(99, 179, 237, 0.45);
-    border: 1px solid #63B3ED;
+    background-color: var(--blue-400-45);
+    border: 1px solid var(--blue-400);
     border-left: none;
     border-right: none;
     padding-top: 11px;
     padding-bottom: 11px;
   }
 
-  .favicon, .favicon-placeholder {
+  .emoji {
+    font-size: 16px;
+  }
+
+  .favicon, .favicon-placeholder, .emoji {
     width: 16px;
     margin-right: 16px;
   }
@@ -67,6 +80,16 @@
     height: 12px;
     background-color: #ED8936;
     border-radius: 100%;
+  }
+  li:nth-of-type(2n) .favicon-placeholder {
+    background-color: #F56565;
+  }
+  li:nth-of-type(3n) .favicon-placeholder {
+    background-color: #48BB78;
+  }
+
+  li:nth-of-type(4n) .favicon-placeholder {
+    background-color: #38B2AC;
   }
 
   .info {
@@ -86,7 +109,7 @@
 
   .url {
     font-size: 12px;
-    color: #4A5568;
+    color: var(--gray-700);
     margin-top: 4px;
   }
 </style>

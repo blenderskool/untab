@@ -1,0 +1,59 @@
+:root {
+  /*
+    * Most of these colors are from tailwindcss
+    * https://tailwindcss.com/docs/customizing-colors#default-color-palette
+    */
+  --bg: #FFF;
+  --bg-80: rgba(255, 255, 255, 0.8);
+  --white: #FFF;
+  --gray-300-90: rgba(226, 232, 240, 0.9);
+  --gray-500: #A0AEC0;
+  --gray-600: #718096;
+  --gray-700: #4A5568;
+  --gray-800: #2D3748;
+  --blue-400: #63B3ED;
+  --blue-400-45: rgba(99, 179, 237, 0.45);
+  --border-col: #CECECE;
+}
+
+.search-wrapper.theme-dark {
+  --bg: #1A202C;
+  --bg-80: rgba(13, 15, 18, 0.8);
+  --white: #25282F;
+  --gray-300-90: rgba(9, 11, 14, 0.9);
+  --gray-500: #596473;
+  --gray-600: #596473;
+  --gray-700: #718096;
+  --gray-800: #A0AEC0;
+  --blue-400: #3182CE;
+  --blue-400-45: rgba(49, 130, 206, 0.45);
+  --border-col: #313131;
+}
+
+.search-wrapper.theme-coffee {
+  --bg: #231d1e;
+  --bg-80: rgba(35, 29, 30, 0.8);
+  --white: #c4babb;
+  --gray-300-90: rgba(31, 25, 26, 0.9);
+  --gray-500: #6e6062;
+  --gray-600: #6e6062;
+  --gray-700: #8f8183;
+  --gray-800: #c4babb;
+  --blue-400: #725a5e;
+  --blue-400-45: rgba(114, 90, 94, 0.45);
+  --border-col: #4f4040;
+}
+
+.search-wrapper.theme-spearmint {
+  --bg: #304140;
+  --bg-80: rgba(48, 65, 64, 0.8);
+  --white: #b4c7c6;
+  --gray-300-90: rgba(39, 57, 55, 0.9);
+  --gray-500: #59706f;
+  --gray-600: #6e8584;
+  --gray-700: #91a7a5;
+  --gray-800: #b4c7c6;
+  --blue-400: #4c8380;
+  --blue-400-45: rgba(90, 140, 130, 0.45);
+  --border-col: #435958;
+}

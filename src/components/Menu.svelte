@@ -31,7 +31,7 @@
 
   .menu {
     padding: 4px;
-    background-color: #fff;
+    background-color: var(--bg);
     position: absolute;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -54,7 +54,7 @@
   }
 
   .menu ul li.active {
-    background-color: rgba(99, 179, 237, 0.45);
+    background-color: var(--blue-400-45);
   }
 
 </style>
