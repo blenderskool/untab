@@ -167,6 +167,12 @@ export default {
         url: '',
         emoji: '🌿',
         theme: 'spearmint',
+      },
+      {
+        title: 'Ocean',
+        url: '',
+        emoji: '🌊',
+        theme: 'ocean'
       }
     ],
     handler({ theme }, sendResponse) {

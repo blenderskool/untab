@@ -57,3 +57,17 @@
   --blue-400-45: rgba(90, 140, 130, 0.45);
   --border-col: #435958;
 }
+
+.search-wrapper.theme-ocean {
+  --bg: #2a4574;
+  --bg-80: rgba(10, 35, 105, 0.8);
+  --white: #b4c7c6;
+  --gray-300-90: rgba(0, 33, 102, 0.9);
+  --gray-500: #75a3de;
+  --gray-600: #75a3de;
+  --gray-700: #b1d0ff;
+  --gray-800: #def5fc;
+  --blue-400: #3F80D8;
+  --blue-400-45: rgba(30, 143, 255, 0.45);
+  --border-col: #032565;
+}
