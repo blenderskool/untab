@@ -173,6 +173,12 @@ export default {
         url: '',
         emoji: '🌊',
         theme: 'ocean'
+      },
+      {
+        title: 'Sakura',
+        url: '',
+        emoji: '🌸',
+        theme: 'sakura'
       }
     ],
     handler({ theme }, sendResponse) {

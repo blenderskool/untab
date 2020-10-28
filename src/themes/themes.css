@@ -71,3 +71,17 @@
   --blue-400-45: rgba(30, 143, 255, 0.45);
   --border-col: #20354f;
 }
+
+.search-wrapper.theme-sakura {
+  --bg: #ffb7c5;
+  --bg-80: rgba(255, 183, 197, 0.8);
+  --white: #ffb7c5;
+  --gray-300-90: rgba(215, 94, 139, 0.9);
+  --gray-500: #ffebe3;
+  --gray-600: #fad9d9;
+  --gray-700: #ffece6;
+  --gray-800: #fffeee;
+  --blue-400: #e9bac1;
+  --blue-400-45: rgba(227, 88, 118, 0.45);
+  --border-col: #e9bac1;
+}
