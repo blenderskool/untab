@@ -28,5 +28,5 @@
     "chrome://favicon/",
     "storage"
   ],
-  "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: chrome://favicon;"
+  "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data: chrome://favicon;"
 }
