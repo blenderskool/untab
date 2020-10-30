@@ -26,7 +26,8 @@
     "history",
     "bookmarks",
     "chrome://favicon/",
-    "storage"
+    "storage",
+    "https://api.duckduckgo.com/*"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data: chrome://favicon;"
 }
