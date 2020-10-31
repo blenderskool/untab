@@ -71,3 +71,20 @@
   --blue-400-45: rgba(30, 143, 255, 0.45);
   --border-col: #20354f;
 }
+
+.search-wrapper.theme-summer
+{
+  
+  --bg: #e0aa13;  /*repeating-linear-gradient(45deg, red 0px, #ffa500 20px, #ffff00 20px, #008000 20px, #0000ff 20px, #4b0082 20px, #ee82ee); */
+  --bg-80: #e0b66d; /*repeating-linear-gradient(45deg, #ff0000 0px, #ffa500 20px, #ffff00 20px, #008000 20px, #0000ff 20px, #4b0082 20px, #ee82ee, 0.8); */ /* background */
+  --white: #e2e06e;
+  --gray-300-90: rgb(82, 87, 24);
+  --gray-500: #000000; /*close button */
+  --gray-600: #000000; /* search tab*/
+  --gray-700: #000000;/*navigate, bottom tab, on hover */
+  --gray-800: #1d3f0d; /* table content, no hover */
+  --blue-400: #800020;
+  --blue-400-45: rgba(227, 243, 8, 0.45);
+  --border-col: #20354f;
+
+}
