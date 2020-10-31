@@ -2,6 +2,8 @@
   import { onDestroy } from 'svelte';
   import Result from './Result.svelte';
 
+  import { FrownIcon } from 'svelte-feather-icons'
+
   import { results } from '../store';
   import keyNavArray from '../utils/keyNavArray';
 
@@ -36,6 +38,15 @@
       ↑ and ↓ to navigate, ↲ to select
     </span>
   </footer>
+{:else}
+  <div class="no-match">
+    <span style="margin-bottom: 10px">
+      <FrownIcon class="icon" size="24"/>
+    </span>
+    <span>
+      Nothing matched the search phrase
+    </span>
+  </div>
 {/if}
 
 <style>
@@ -78,4 +89,15 @@
     display: flex;
     justify-content: space-between;
   }
+
+.no-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  font-size: 1.125rem;
+  color: var(--gray-600);
+  border-top: 1px solid var(--border-col);
+}
 </style>
