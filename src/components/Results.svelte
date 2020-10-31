@@ -39,7 +39,7 @@
     </span>
   </footer>
 {:else}
-  <div class ="no-match">
+  <div class="no-match">
     <span style="margin-bottom: 10px">
       <FrownIcon class="icon" size="24"/>
     </span>
@@ -96,7 +96,7 @@
   align-items: center;
   justify-content: center;
   height: 120px;
-  font-size: 18px;
+  font-size: 1.125rem;
   color: var(--gray-600);
   border-top: 1px solid var(--border-col);
 }
