@@ -31,9 +31,10 @@
     {/each}
   </ul>
   <footer>
-    <span>
-      {$results.length} {#if $results.length>1} results {:else} result{/if}
-    </span>
+    <a href="https://paypal.me/akashhamirwasia" class="support" target="blank">
+      <span style="margin-right: 2px">💙</span>
+      Support UnTab
+    </a>
     <span>
       <span class="hotkey">
         <ArrowUpIcon size="14" />
@@ -76,14 +77,14 @@
     list-style: none;
     overflow-y: auto;
     max-height: 60vh;
-    border: 1px solid var(--border-col);
+    border: 1px solid var(--border);
     border-right: none;
     border-left: none;
   }
 
   .results::-webkit-scrollbar {
     width: 6px;
-    background-color: var(--border-col);
+    background-color: var(--border);
   }
 
   .results::-webkit-scrollbar-thumb {
@@ -122,6 +123,12 @@
     font-size: 11px;
   }
 
+  footer .support {
+    font-weight: 600;
+    color: var(--gray-800);
+    text-decoration: none;
+  }
+
   .no-match {
     display: flex;
     flex-direction: column;
@@ -130,6 +137,6 @@
     height: 120px;
     font-size: 1.125rem;
     color: var(--gray-600);
-    border-top: 1px solid var(--border-col);
+    border-top: 1px solid var(--border);
   }
 </style>

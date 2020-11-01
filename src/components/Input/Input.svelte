@@ -1,9 +1,9 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
-  import { XIcon } from 'svelte-feather-icons';
   import Menu from '../Menu.svelte';
   import ContextIndicator from './ContextIndicator.svelte';
+  import Pill from './Pill.svelte';
 
   import constants from '../../constants';
   import { results, searchVal, inputState } from '../../store';
@@ -70,13 +70,6 @@
           data: val,
         });
     }
-  }
-
-  function clear() {
-    suggestion = '';
-    inputState.reset();
-    searchVal.reset();
-    input.focus();
   }
 
   function handleKey({ key }) {
@@ -152,10 +145,10 @@
     on:keydown={handleKey}
   />
 
-  {#if $inputState !== 'text' || $searchVal.query}
-    <span style="cursor: pointer;" on:click={clear}>
-      <XIcon class="icon" size="20" />
-    </span>
+  {#if $results.length}
+    <Pill style="margin-left: 8px;">
+      {$results.length} {$results.length > 1 ? 'results' : 'result'}
+    </Pill>
   {/if}
 </div>
 
@@ -186,7 +179,7 @@
     position: absolute;
     left: 16px;
     display: flex;
-    max-width: 86%;
+    max-width: 83%;
     white-space: nowrap;
   }
 

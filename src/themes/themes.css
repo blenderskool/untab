@@ -13,7 +13,8 @@
   --gray-800: #2D3748;
   --blue-400: #63B3ED;
   --blue-400-45: rgba(99, 179, 237, 0.45);
-  --border-col: #CECECE;
+  --border: #CBD5E0;
+  --bg-pill: #CBD5E0;
 }
 
 .search-wrapper.theme-dark {
@@ -27,7 +28,8 @@
   --gray-800: #A0AEC0;
   --blue-400: #3182CE;
   --blue-400-45: rgba(49, 130, 206, 0.45);
-  --border-col: #313131;
+  --border: #313131;
+  --bg-pill: rgba(9, 11, 14, 0.9);
 }
 
 .search-wrapper.theme-coffee {
@@ -41,7 +43,8 @@
   --gray-800: #c4babb;
   --blue-400: #725a5e;
   --blue-400-45: rgba(114, 90, 94, 0.45);
-  --border-col: #4f4040;
+  --border: #4f4040;
+  --bg-pill: rgba(31, 25, 26, 0.9);
 }
 
 .search-wrapper.theme-spearmint {
@@ -55,7 +58,8 @@
   --gray-800: #b4c7c6;
   --blue-400: #4c8380;
   --blue-400-45: rgba(90, 140, 130, 0.45);
-  --border-col: #435958;
+  --border: #435958;
+  --bg-pill: rgba(39, 57, 55, 0.9);
 }
 
 .search-wrapper.theme-ocean {
@@ -69,5 +73,6 @@
   --gray-800: #def5fc;
   --blue-400: #3F80D8;
   --blue-400-45: rgba(30, 143, 255, 0.45);
-  --border-col: #20354f;
+  --border: #20354f;
+  --bg-pill: rgba(19, 46, 79, 0.9);
 }
