@@ -82,32 +82,37 @@ export default {
     match: /\s*(.*?)/,
     keys: [ 'd', 'duckduckgo' ],
     async item(query) {
-      const results = [
-        {
-          favicon: 'https://duckduckgo.com/favicon.ico',
-          title: 'Search DuckDuckGo for $1',
-          url: 'https://duckduckgo.com?q=$1',
-        }
-      ]
+      const results = []
       if (query.length > 3) {
-        const search = await fetch(`https://api.duckduckgo.com/?q=${query}&format=json`).then(response => response.json())
-        if (search.Results[0]) results.push({
-            favicon: search.Results[0].Icon.URL,
-            title: search.Results[0].Text,
-            url: search.Results[0].FirstURL
-        })
+        const category = 'Instant answer'
+        const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json())
         if (search.Abstract) results.push({
-            favicon: search.Image,
-            title: search.AbstractText,
-            url: search.AbstractURL
+          favicon: search.Image,
+          title: search.AbstractText,
+          url: search.AbstractURL,
+          category
         })
+        results.push(...search.Results.map(result => ({
+          favicon: result.Icon.URL,
+          title: result.Text,
+          url: result.FirstURL,
+          category
+        })))
         results.push(...search.RelatedTopics.map(topic => ({
           favicon: topic.Icon.URL,
           title: topic.Text,
-          url: topic.FirstURL
+          url: topic.FirstURL,
+            category
         })))
       }
-      return results
+      return [
+        {
+          favicon: 'https://duckduckgo.com/favicon.ico',
+          title: 'Results from DuckDuckGo for $1',
+          url: 'https://duckduckgo.com?q=$1',
+        },
+        ...results
+      ]
     },
     handler(item, sendResponse) {
       chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
