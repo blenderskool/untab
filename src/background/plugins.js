@@ -85,25 +85,27 @@ export default {
       const results = []
       if (query.length > 3) {
         const category = 'Instant answer'
-        const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json())
-        if (search.Abstract) results.push({
-          favicon: search.Image,
-          title: search.AbstractText,
-          url: search.AbstractURL,
-          category
-        })
-        results.push(...search.Results.map(result => ({
-          favicon: result.Icon.URL,
-          title: result.Text,
-          url: result.FirstURL,
-          category
-        })))
-        results.push(...search.RelatedTopics.map(topic => ({
-          favicon: topic.Icon.URL,
-          title: topic.Text,
-          url: topic.FirstURL,
+        try {
+          const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json())
+          if (search.Abstract) results.push({
+            favicon: search.Image,
+            title: search.AbstractText,
+            url: search.AbstractURL,
             category
-        })))
+          })
+          results.push(...search.Results.map(result => ({
+            favicon: result.Icon.URL,
+            title: result.Text,
+            url: result.FirstURL,
+            category
+          })))
+          results.push(...search.RelatedTopics.map(topic => ({
+            favicon: topic.Icon.URL,
+            title: topic.Text,
+            url: topic.FirstURL,
+              category
+          })))
+        } catch {}
       }
       return [
         {
