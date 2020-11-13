@@ -22,7 +22,7 @@
 <div class="menu {$$props.class || ''}">
   <ul>
     {#each items as item, i}
-      <li class:active={$activeIdx === i}>
+      <li class:active={$activeIdx === i} on:click={() => dispatch('select', items[i])}>
         <slot item={item} />
       </li>
     {/each}
@@ -53,9 +53,11 @@
     line-height: 1;
     font-weight: 600;
     font-size: 15px;
+    cursor: pointer;
   }
 
-  .menu ul li.active {
+  .menu ul li.active,
+  .menu ul li:hover {
     background-color: var(--blue-400-45);
   }
 
