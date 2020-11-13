@@ -3,9 +3,11 @@
   import keyNavArray from '../utils/keyNavArray';
 
   export let items;
+  let activeIdx;
 
   const dispatch = createEventDispatcher();
-  const activeIdx = keyNavArray(items);
+
+  $: activeIdx = keyNavArray(items);
 
   function handleSelect({ key }) {
     if (key !== 'Enter') return;
