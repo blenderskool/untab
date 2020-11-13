@@ -82,29 +82,39 @@ export default {
     match: /\s*(.*?)/,
     keys: [ 'd', 'duckduckgo' ],
     async item(query) {
-      const results = []
+      const results = [];
+
       if (query.length > 3) {
-        const category = 'Instant answer'
+        const category = 'Instant answer';
         try {
-          const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json())
-          if (search.Abstract) results.push({
-            favicon: search.Image,
-            title: search.AbstractText,
-            url: search.AbstractURL,
-            category
-          })
+          const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json());
+
+          if (search.Abstract) {
+            results.push({
+              favicon: search.Image,
+              title: search.AbstractText,
+              url: search.AbstractURL,
+              category,
+            });
+          }
+
           results.push(...search.Results.map(result => ({
-            favicon: result.Icon.URL,
+            favicon: result.Icon?.URL,
             title: result.Text,
             url: result.FirstURL,
-            category
-          })))
-          results.push(...search.RelatedTopics.map(topic => ({
-            favicon: topic.Icon.URL,
-            title: topic.Text,
-            url: topic.FirstURL,
-              category
-          })))
+            category,
+          })));
+
+          results.push(
+            ...search.RelatedTopics
+              .filter(topic => !!topic.FirstURL)
+              .map(topic => ({
+                favicon: topic.Icon?.URL,
+                title: topic.Text,
+                url: topic.FirstURL,
+                category,
+              }))
+          );
         } catch {}
       }
       return [
@@ -113,8 +123,8 @@ export default {
           title: 'Results from DuckDuckGo for $1',
           url: 'https://duckduckgo.com?q=$1',
         },
-        ...results
-      ]
+        ...results,
+      ];
     },
     handler(item, sendResponse) {
       chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
