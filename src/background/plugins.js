@@ -87,9 +87,10 @@ export default {
       if (query.length > 3) {
         const category = 'Instant answer';
         const parseIconUrl = (url) => {
-          if (!url || url === '') return 'https://duckduckgo.com/favicon.ico'
-          return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url
-        }
+          if (!url || url === '') return;
+          return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url;
+        };
+
         try {
           const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json());
 
