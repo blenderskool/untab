@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+  "name": "UnTab",
+  "version": "0.0.1",
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": [
+      "browser-polyfill.min.js",
+      "content/content.js"
+    ],
+    "css": ["content/styles.css"]
+  }],
+  "web_accessible_resources": ["index.html"],
+  "background": {
+    "scripts": [
+      "browser-polyfill.min.js",
+      "background.js"
+    ]
+  },
+  "browser_action": {},
+  "commands": {
+    "toggle-search": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Space",
+        "mac": "Command+Shift+Space"
+      },
+      "description": "Send a 'toggle-search' event to the extension"
+    }
+  },
+  "permissions": [
+    "tabs",
+    "history",
+    "bookmarks",
+    "storage",
+    "https://api.duckduckgo.com/*"
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data:"
+}

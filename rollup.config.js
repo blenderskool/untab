@@ -6,9 +6,10 @@ import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
+const BROWSER_ENV = process.env.BROWSER_ENV || 'chrome';
 
 const envs = replace({
-  'process.env.BROWSER_ENV': JSON.stringify(process.env.BROWSER_ENV || 'chrome'),
+  'process.env.BROWSER_ENV': JSON.stringify(BROWSER_ENV),
 });
 
 export default [
@@ -68,7 +69,7 @@ export default [
       copy({
         targets: [
           { src: 'src/content/styles.css', dest: 'dist/content/' },
-          { src: 'src/manifest.json', dest: 'dist/' },
+          { src: `src/manifest.${BROWSER_ENV}.json`, dest: 'dist/', rename: 'manifest.json' },
           { src: 'src/index.html', dest: 'dist/' },
           { src: 'src/fonts/', dest: 'dist/' },
           { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
