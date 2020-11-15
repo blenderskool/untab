@@ -1,10 +1,15 @@
 import svelte from 'rollup-plugin-svelte';
+import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
+
+const envs = replace({
+  'process.env.BROWSER_ENV': JSON.stringify(process.env.BROWSER_ENV || 'chrome'),
+});
 
 export default [
   {
@@ -35,6 +40,7 @@ export default [
         browser: true,
         dedupe: ['svelte'],
       }),
+      envs,
       commonjs(),
 
       // If we're building for production (npm run build
@@ -56,6 +62,7 @@ export default [
       resolve({
         browser: true,
       }),
+      envs,
       commonjs(),
       terser(),
       copy({
@@ -82,6 +89,7 @@ export default [
       resolve({
         browser: true,
       }),
+      envs,
       commonjs(),
       terser(),
     ],

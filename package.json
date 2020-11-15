@@ -2,11 +2,13 @@
   "name": "untab",
   "version": "0.1.0",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "build-firefox": "BROWSER_ENV=firefox rollup -c"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "@rollup/plugin-replace": "^2.3.4",
     "rollup": "^2.3.4",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-svelte": "^6.0.0",
