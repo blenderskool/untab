@@ -81,10 +81,55 @@ export default {
     displayName: 'DuckDuckGo search',
     match: /\s*(.*?)/,
     keys: [ 'd', 'duckduckgo' ],
-    item: {
-      favicon: 'https://duckduckgo.com/favicon.ico',
-      title: 'Search DuckDuckGo for $1',
-      url: 'https://duckduckgo.com?q=$1',
+    async item(query) {
+      const results = [];
+
+      if (query.length > 3) {
+        const category = 'Instant answer';
+        const parseIconUrl = (url) => {
+          if (!url || url === '') return;
+          return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url;
+        };
+
+        try {
+          const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json());
+
+          if (search.Abstract) {
+            results.push({
+              favicon: parseIconUrl(search.Image),
+              title: search.AbstractText,
+              url: search.AbstractURL,
+              category,
+            });
+          }
+
+          results.push(...search.Results.map(result => ({
+            favicon: parseIconUrl(result.Icon?.URL),
+            title: result.Text,
+            url: result.FirstURL,
+            category,
+          })));
+
+          results.push(
+            ...search.RelatedTopics
+              .filter(topic => !!topic.FirstURL)
+              .map(topic => ({
+                favicon: parseIconUrl(topic.Icon?.URL),
+                title: topic.Text,
+                url: topic.FirstURL,
+                category,
+              }))
+          );
+        } catch {}
+      }
+      return [
+        {
+          favicon: 'https://duckduckgo.com/favicon.ico',
+          title: 'Results from DuckDuckGo for $1',
+          url: 'https://duckduckgo.com?q=$1',
+        },
+        ...results,
+      ];
     },
     handler(item, sendResponse) {
       chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
