@@ -10,7 +10,7 @@
 
   let input, suggestion = '';
 
-  const port = chrome.runtime.connect({ name: constants.SEARCH_PORT });
+  const port = browser.runtime.connect({ name: constants.SEARCH_PORT });
   port.onMessage.addListener((response) => {
     results.set(response);
 

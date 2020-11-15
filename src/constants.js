@@ -5,6 +5,6 @@ export default {
   SEARCH_TYPE_FULL: 'search-type-full',
   TOGGLE_SEARCH: 'toggle-search',
   OPEN: 'open',
-  SELECT: 'select',
+  SELECT_PORT: 'select-port',
   PLUGIN: 'plugin',
 };

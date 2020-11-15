@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { storedKeys } from '../store';
   import constants from '../constants';
 
   export let result, isFocused = false;
@@ -13,16 +12,7 @@
   function handleSelect({ key }) {
     if (key && (key !== 'Enter' || !isFocused)) return;
 
-    chrome.runtime.sendMessage({
-      type: constants.SELECT,
-      data: result,
-    }, ({ autoClose, ...storage }) => {
-      storedKeys.update((obj) => ({ ...obj, ...storage }));
-
-      if (autoClose !== false) {
-        dispatch('select');
-      }
-    });
+    dispatch('select', result);
   }
 
   $: if (isFocused && element) {

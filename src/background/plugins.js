@@ -1,9 +1,7 @@
 export default {
   'tabs': {
     async item() {
-      const tabs = await new Promise(resolve => {
-        chrome.tabs.query({}, resolve);
-      });
+      const tabs = await browser.tabs.query({});
 
       return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
         id,
@@ -14,12 +12,9 @@ export default {
         category: 'Tabs',
       }));
     },
-    handler(item, sendResponse) {
-      chrome.windows.update(
-        item.windowId,
-        { focused: true },
-        () => chrome.tabs.update(item.id, { active: true }, () => sendResponse()),
-      );
+    async handler(item) {
+      await browser.windows.update(item.windowId, { focused: true });
+      await browser.tabs.update(item.id, { active: true });
     }
   },
   'tab-actions': {
@@ -48,18 +43,17 @@ export default {
         category: 'Current Tab',
       },
     ],
-    handler(item, sendResponse) {
+    async handler(item) {
       switch(item.key) {
         case 'back':
-          chrome.tabs.goBack(null, sendResponse);
+          await browser.tabs.goBack(null);
           break;
         case 'forward':
-          chrome.tabs.goForward(null, sendResponse);
+          await browser.tabs.goForward(null);
           break;
         case 'close':
-          chrome.tabs.query({ active: true, currentWindow: true }, (results) => {
-            chrome.tabs.remove(results[0].id, sendResponse);
-          });
+          const results = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.tabs.remove(results[0].id);
           break;
       }
     }
@@ -73,8 +67,8 @@ export default {
       title: 'Search Google for $1',
       url: 'https://www.google.com/search?q=$1',
     },
-    handler(item, sendResponse) {
-      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
     }
   },
   'duckduckgo-search': {
@@ -131,8 +125,8 @@ export default {
         ...results,
       ];
     },
-    handler(item, sendResponse) {
-      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
     }
   },
   'open-url': {
@@ -145,16 +139,14 @@ export default {
         url,
       }
     },
-    handler(item, sendResponse) {
-      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
     }
   },
   'history': {
     async item(query) {
-      const histories = await new Promise(resolve => 
-        chrome.history.search({ text: query, maxResults: 40 }, resolve)
-      );
-      
+      const histories = await browser.history.search({ text: query, maxResults: 40 });
+
       return histories.map(({ title, url }) => ({
         title,
         url,
@@ -162,17 +154,15 @@ export default {
         category: 'History',
       }));
     },
-    handler(item, sendResponse) {
-      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
     }
   },
   'bookmarks': {
     async item(query) {
       if (!query) return [];
 
-      const bookmarkTreeNodes = await new Promise(resolve => 
-        chrome.bookmarks.search(query, resolve)
-      );
+      const bookmarkTreeNodes = await browser.bookmarks.search(query);
 
       return bookmarkTreeNodes
         .filter(({ url }) => !!url) // We avoid adding the bookmarkTreeNode to the list if it is a folder
@@ -183,8 +173,8 @@ export default {
           category: 'Bookmarks'
         }));
     },
-    handler(item, sendResponse) {
-      chrome.tabs.create({ active: true, url: item.url }, () => sendResponse());
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
     }
   },
   'themes': {
@@ -222,10 +212,10 @@ export default {
         theme: 'ocean'
       }
     ],
-    handler({ theme }, sendResponse) {
-      chrome.storage.local.set({ theme }, () => {
-        sendResponse({ theme, autoClose: false });
-      });
+    async handler({ theme }) {
+      await browser.storage.local.set({ theme });
+
+      return { theme, autoClose: false };
     }
-  }
+  },
 };
