@@ -1,3 +1,5 @@
+import getFaviconUrl from './utils/getFaviconUrl';
+
 export default {
   'tabs': {
     async item() {
@@ -134,7 +136,7 @@ export default {
     async item(query) {
       const url = /^https?:\/\//.exec(query) ? query : `https://${query}`;
       return {
-        favicon: `chrome://favicon/${url}`,
+        favicon: getFaviconUrl(url),
         title: `Open ${query} in new tab`,
         url,
       }
@@ -150,7 +152,7 @@ export default {
       return histories.map(({ title, url }) => ({
         title,
         url,
-        favicon: `chrome://favicon/${url}`,
+        favicon: getFaviconUrl(url),
         category: 'History',
       }));
     },
@@ -169,7 +171,7 @@ export default {
         .map(({ title, url }) => ({
           title,
           url,
-          favicon: `chrome://favicon/${url}`,
+          favicon: getFaviconUrl(url),
           category: 'Bookmarks'
         }));
     },

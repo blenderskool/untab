@@ -1,4 +1,4 @@
-import Fuse from './fuse';
+import Fuse from './utils/fuse';
 import plugins from './plugins';
 import constants from '../constants';
 
