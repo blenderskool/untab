@@ -168,6 +168,8 @@ export default {
   },
   'bookmarks': {
     async item(query) {
+      if (!query) return [];
+
       const bookmarkTreeNodes = await new Promise(resolve => 
         chrome.bookmarks.search(query, resolve)
       );
