@@ -66,6 +66,7 @@ export default [
           { src: 'src/fonts/', dest: 'dist/' },
           { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
           { src: 'src/themes/themes.css', dest: 'dist/themes/' },
+          { src: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js', dest: 'dist/' },
         ],
       }),
     ],

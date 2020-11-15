@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "fuse.js": "^6.4.1",
-    "svelte-feather-icons": "^3.2.2"
+    "svelte-feather-icons": "^3.2.2",
+    "webextension-polyfill": "^0.7.0"
   }
 }

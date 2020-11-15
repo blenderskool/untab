@@ -4,12 +4,18 @@
   "version": "0.0.1",
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["content/content.js"],
+    "js": [
+      "browser-polyfill.min.js",
+      "content/content.js"
+    ],
     "css": ["content/styles.css"]
   }],
   "web_accessible_resources": ["index.html"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "browser-polyfill.min.js",
+      "background.js"
+    ]
   },
   "browser_action": {},
   "commands": {
