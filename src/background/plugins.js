@@ -86,12 +86,16 @@ export default {
 
       if (query.length > 3) {
         const category = 'Instant answer';
+        const parseIconUrl = (url) => {
+          if (!url || url === '') return 'https://duckduckgo.com/favicon.ico'
+          return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url
+        }
         try {
           const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json());
 
           if (search.Abstract) {
             results.push({
-              favicon: search.Image,
+              favicon: parseIconUrl(search.Image),
               title: search.AbstractText,
               url: search.AbstractURL,
               category,
@@ -99,7 +103,7 @@ export default {
           }
 
           results.push(...search.Results.map(result => ({
-            favicon: result.Icon?.URL,
+            favicon: parseIconUrl(result.Icon?.URL),
             title: result.Text,
             url: result.FirstURL,
             category,
@@ -109,7 +113,7 @@ export default {
             ...search.RelatedTopics
               .filter(topic => !!topic.FirstURL)
               .map(topic => ({
-                favicon: topic.Icon?.URL,
+                favicon: parseIconUrl(topic.Icon?.URL),
                 title: topic.Text,
                 url: topic.FirstURL,
                 category,
