@@ -16,7 +16,7 @@
   }
 
   $: if (isFocused && element) {
-    element.scrollIntoView({ block: 'center' });
+    element.scrollIntoView({ block: 'nearest' });
   }
 
 </script>
@@ -46,6 +46,7 @@
     align-items: center;
     cursor: pointer;
     transition: background-color 0.1s ease;
+    scroll-margin-top: 5rem;
   }
   li:hover,
   li.is-focused {
