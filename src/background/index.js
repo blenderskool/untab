@@ -1,4 +1,4 @@
-import Fuse from './fuse';
+import Fuse from './utils/fuse';
 import plugins from './plugins';
 import constants from '../constants';
 
@@ -181,62 +181,62 @@ async function searchPluginItems({ data }) {
   };
 }
 
-chrome.runtime.onConnect.addListener(port => {
-  if (port.name !== constants.SEARCH_PORT) return;
+browser.runtime.onConnect.addListener(port => {
+  if (port.name === constants.SEARCH_PORT) {
+    port.onMessage.addListener(async (req) => {
 
-  port.onMessage.addListener(async (req) => {
+      let results;
+      switch(req.type) {
+        case constants.SEARCH_TYPE_PLUGINS:
+          results = searchPlugins(req);
+          break;
+        case constants.SEARCH_TYPE_PLUGIN:
+          results = await searchPluginItems(req);
+          break;
+        case constants.SEARCH_TYPE_FULL:
+          results = await searchData(req);
+          break;
+      }
 
-    let results;
-    switch(req.type) {
-      case constants.SEARCH_TYPE_PLUGINS:
-        results = searchPlugins(req);
-        break;
-      case constants.SEARCH_TYPE_PLUGIN:
-        results = await searchPluginItems(req);
-        break;
-      case constants.SEARCH_TYPE_FULL:
-        results = await searchData(req);
-        break;
-    }
+      port.postMessage(results);
+    });
+  } else if (port.name === constants.SELECT_PORT) {
+    port.onMessage.addListener(async ({ data:item }) => {
+      let results = { autoClose: true };
 
-    port.postMessage(results);
-  });
-});
+      if (item.type === constants.PLUGIN) {
+        /**
+         * Plugins are executed by calling their specific handler method
+         * handler is passed item object that was selected.
+         * returned object is sent back as response
+         */
+        const data = (await plugins[item.name].handler(item));
+        if (typeof data === 'object') {
+          results = { ...results, ...data };
+        }
+      }
 
-chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-  if (req.type !== constants.SELECT) return;
-
-  const item = req.data;
-
-  if (item.type === constants.PLUGIN) {
-    const sendResponseCB = (data = {}) => sendResponse({ autoClose: true, ...data });
-    /**
-     * Plugins are executed by calling their specific handler method
-     * handler is passed item object that was selected,
-     * sendResponse callback to indicate it has finished handling the task.
-     */
-    plugins[item.name].handler(item, sendResponseCB);
+      port.postMessage(results);
+    });
   }
-
-  return true;
 });
 
 async function triggerOpen(tab) {
   const [results, storage] = await Promise.all([
-    tab ? [ tab ] : new Promise(resolve => chrome.tabs.query({ active: true, currentWindow: true }, resolve)),
-    new Promise(resolve => chrome.storage.local.get(null, resolve)),
+    tab ? [ tab ] : browser.tabs.query({ active: true, currentWindow: true }),
+    browser.storage.local.get(null),
   ]);
 
-  chrome.tabs.sendMessage(results[0].id, {
+  browser.tabs.sendMessage(results[0].id, {
     type: constants.OPEN,
     data: {
       storage,
       ...search,
     },
-  });
+  }).catch(err => console.log(err));
 }
 
-chrome.commands.onCommand.addListener(async (command) => {
+browser.commands.onCommand.addListener(async (command) => {
   switch (command) {
     case constants.TOGGLE_SEARCH:
       await triggerOpen();
@@ -244,4 +244,4 @@ chrome.commands.onCommand.addListener(async (command) => {
   }
 });
 
-chrome.browserAction.onClicked.addListener(async (tab) => await triggerOpen(tab));
+browser.browserAction.onClicked.addListener(triggerOpen);

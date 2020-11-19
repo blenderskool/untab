@@ -1,10 +1,16 @@
 import svelte from 'rollup-plugin-svelte';
+import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
+const BROWSER_ENV = process.env.BROWSER_ENV || 'chrome';
+
+const envs = replace({
+  'process.env.BROWSER_ENV': JSON.stringify(BROWSER_ENV),
+});
 
 export default [
   {
@@ -35,6 +41,7 @@ export default [
         browser: true,
         dedupe: ['svelte'],
       }),
+      envs,
       commonjs(),
 
       // If we're building for production (npm run build
@@ -56,16 +63,18 @@ export default [
       resolve({
         browser: true,
       }),
+      envs,
       commonjs(),
       terser(),
       copy({
         targets: [
           { src: 'src/content/styles.css', dest: 'dist/content/' },
-          { src: 'src/manifest.json', dest: 'dist/' },
+          { src: `src/manifest.${BROWSER_ENV}.json`, dest: 'dist/', rename: 'manifest.json' },
           { src: 'src/index.html', dest: 'dist/' },
           { src: 'src/fonts/', dest: 'dist/' },
           { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
           { src: 'src/themes/themes.css', dest: 'dist/themes/' },
+          { src: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js', dest: 'dist/' },
         ],
       }),
     ],
@@ -81,6 +90,7 @@ export default [
       resolve({
         browser: true,
       }),
+      envs,
       commonjs(),
       terser(),
     ],

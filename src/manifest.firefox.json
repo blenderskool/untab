@@ -1,15 +1,21 @@
 {
   "manifest_version": 2,
   "name": "UnTab",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["content/content.js"],
+    "js": [
+      "browser-polyfill.min.js",
+      "content/content.js"
+    ],
     "css": ["content/styles.css"]
   }],
   "web_accessible_resources": ["index.html"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "browser-polyfill.min.js",
+      "background.js"
+    ]
   },
   "browser_action": {},
   "commands": {
@@ -25,9 +31,8 @@
     "tabs",
     "history",
     "bookmarks",
-    "chrome://favicon/",
     "storage",
     "https://api.duckduckgo.com/*"
   ],
-  "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data: chrome://favicon;"
+  "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data:"
 }

@@ -1,21 +1,39 @@
 <script>
-  import { onDestroy } from 'svelte';
+  import { onDestroy, createEventDispatcher } from 'svelte';
   import { FrownIcon, ArrowDownIcon, ArrowUpIcon, CornerDownLeftIcon } from 'svelte-feather-icons';
 
   import Result from './Result.svelte';
 
-  import { results, inputState, searchVal } from '../store';
+  import { results, inputState, searchVal, storedKeys } from '../store';
   import keyNavArray from '../utils/keyNavArray';
+  import constants from '../constants';
 
   let focusedIdx;
 
-  // Reset focused result to be first result when the results get updated
+  const dispatch = createEventDispatcher();
 
+  const port = browser.runtime.connect({ name: constants.SELECT_PORT });
+  port.onMessage.addListener(({ autoClose, ...storage }) => {
+    storedKeys.update((obj) => ({ ...obj, ...storage }));
+
+    if (autoClose !== false) {
+      dispatch('select');
+    }
+  });
+
+  function handleSelect({ detail }) {
+    port.postMessage({ data: detail });
+  }
+
+  // Reset focused result to be first result when the results get updated
   const unsubscribe = results.subscribe(() => {
     focusedIdx = keyNavArray($results);
   });
 
-  onDestroy(unsubscribe);
+  onDestroy(() => {
+    port.disconnect();
+    unsubscribe();
+  });
 </script>
 
 {#if $results.length}
@@ -25,7 +43,7 @@
         <div class="category">{category}</div>
 
         {#each $results.items[category] as item}
-          <Result result={item} isFocused={item.idx === $focusedIdx} on:select />
+          <Result result={item} isFocused={item.idx === $focusedIdx} on:select={handleSelect} />
         {/each}
       </div>
     {/each}
