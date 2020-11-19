@@ -9,10 +9,14 @@
   import { results, searchVal, inputState } from '../../store';
 
   let input, suggestion = '';
+  let isLoading = false, loadingTimeout;
 
   const port = browser.runtime.connect({ name: constants.SEARCH_PORT });
   port.onMessage.addListener((response) => {
     results.set(response);
+
+    clearTimeout(loadingTimeout);
+    isLoading = false;
 
     const { match } = response;
     if (Array.isArray(match) && match.length) {
@@ -27,6 +31,11 @@
 
   function search(val) {
     const { query } = val;
+
+    clearTimeout(loadingTimeout);
+    loadingTimeout = setTimeout(() => {
+      isLoading = true;
+    }, 500);
 
     if (!query) {
       suggestion = '';
@@ -113,7 +122,7 @@
 
 </script>
 
-<div class="input-wrapper">
+<div class="input-wrapper" class:is-loading={isLoading}>
   <ContextIndicator />
 
   <div class="highlight">
@@ -158,6 +167,38 @@
     height: 52px;
     display: flex;
     align-items: center;
+  }
+  .input-wrapper.is-loading::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    background-color: var(--blue-400);
+    top: 51px;
+    left: 0;
+    right: 100%;
+    animation: loading 2s linear infinite alternate;
+  }
+
+  @keyframes loading {
+    0% {
+      left: 0;
+      right: 100%;
+    }
+
+    25% {
+      left: 0;
+      right: 70%;
+    }
+
+    75% {
+      left: 70%;
+      right: 0;
+    }
+
+    100% {
+      left: 100%;
+      right: 0;
+    }
   }
 
   .input-wrapper input {
