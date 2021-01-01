@@ -36,18 +36,35 @@ cd untab
 
 ### Build the project
 To install the extension on the browser, first build the project using the following command.
+
+#### Chrome and other Chromium based browsers
 ```bash
 npm run build
 ```
+
+#### Firefox
+```bash
+npm run build-firefox
+```
+
 All the built files are generated in the `dist` directory.
 
 ### Install on Browser
-- Go to the extensions page on your browser. For Chrome and Chromium based browsers go to `chrome://extensions`
-- Turn ON `Developer mode`
-- Click on `Load Unpacked`
-- Select the `dist` folder that was generated after the build step. The extension should now show up on the list
+
+#### Chrome and other Chromium based browsers
+- Go to `chrome://extensions`.
+- Turn ON `Developer mode`.
+- Click on `Load Unpacked`.
+- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
 - Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the reload icon next to the installed extension.
+
+#### Firefox
+- Go to `about:debugging` and select `This Firefox` on the left sidebar.
+- Click on `Load Temporary Add-on...` button.
+- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
+- Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
+- NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the `Reload` button in the extension that was installed in the 3rd step.
 
 ## License 
 UnTab is [MIT Licensed](https://github.com/blenderskool/untab/blob/master/LICENSE)

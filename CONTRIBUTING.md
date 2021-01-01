@@ -60,9 +60,9 @@ git checkout -b <your-branch-name>
 ```
 This is the right time to start working on the codebase. You will need to run the project frequently to test your changes. So let's install the development version of the extension on your browser.
 
-### Installing Dev extension on your browser.
-**NOTE:** This guide is currently about Chrome and other Chromium based browsers.
+### Installing Dev extension on your browser
 
+#### Chrome and other Chromium based browsers
 Let's first build the extension from the source code. To build the extension, run the following command at the project root:
 ```bash
 npm run build
@@ -70,13 +70,26 @@ npm run build
 
 A `dist` folder should be created which contains the built code. This is what we'll be installing in the browser in the further steps.
 
-- Go to the extensions page on your browser. For Chrome and Chromium based browsers go to `chrome://extensions`
-- Turn ON `Developer mode`
-- Click on `Load Unpacked`
-- Select the `dist` folder that was generated after the build step. The extension should now show up on the list
+- Go to `chrome://extensions`.
+- Turn ON `Developer mode`.
+- Click on `Load Unpacked`.
+- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
 - Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 
-**NOTE:** Whenever you change the source code, run `npm run build` again and  get the changes synced with the installed extension by clicking on the reload icon next to the installed extension in the extensions page (`chrome://extensions`).
+#### Firefox
+Let's first build the extension from the source code. To build the extension, run the following command at the project root:
+```bash
+npm run build-firefox
+```
+
+A `dist` folder should be created which contains the built code. This is what we'll be installing in the browser in the further steps.
+
+- Go to `about:debugging` and select `This Firefox` on the left sidebar.
+- Click on `Load Temporary Add-on...` button.
+- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
+- Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
+
+**NOTE for all browsers:** Whenever you change the source code, run `npm run build` again and get the changes synced with the installed extension by clicking on the reload icon or `Reload` button next to the installed extension in the extensions page.
 
 ### Preparing the commit
 Once you are ready to commit your changes, it is important to keep the following in mind:
@@ -107,7 +120,7 @@ git push --set-upstream origin <your-branch-name>
 Navigate to UnTab repository [Pull requests](https://github.com/blenderskool/untab/pulls) page and follow the steps:
 - Click on the green `New pull request` button
 - Select the branch you want to **merge from** in the menu that says **compare: ...**
-- Make sure the **base: ** is set to `master`.
+- Make sure the **base:** is set to `master`.
 - Click on `Create pull request` button.
 - Give your Pull request a **title summarizing your changes in the branch**. Write a good description describing the changes.
 - **Important:** Make sure to add `Fixes #<issue-id>` if your pull request fixes some already open issue.
