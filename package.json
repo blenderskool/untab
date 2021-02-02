@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "scripts": {
     "build": "rollup -c",
-    "build-firefox": "BROWSER_ENV=firefox rollup -c"
+    "build:firefox": "BROWSER_ENV=firefox rollup -c",
+    "build:chrome": "BROWSER_ENV=chrome rollup -c"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",

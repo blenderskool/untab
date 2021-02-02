@@ -44,7 +44,7 @@ npm run build
 
 #### Firefox
 ```bash
-npm run build-firefox
+npm run build:firefox
 ```
 
 All the built files are generated in the `dist` directory.

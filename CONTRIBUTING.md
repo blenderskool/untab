@@ -79,7 +79,7 @@ A `dist` folder should be created which contains the built code. This is what we
 #### Firefox
 Let's first build the extension from the source code. To build the extension, run the following command at the project root:
 ```bash
-npm run build-firefox
+npm run build:firefox
 ```
 
 A `dist` folder should be created which contains the built code. This is what we'll be installing in the browser in the further steps.
