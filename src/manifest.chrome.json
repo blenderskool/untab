@@ -2,6 +2,9 @@
   "manifest_version": 2,
   "name": "UnTab",
   "version": "0.2.0",
+  "author": "Akash Hamirwasia",
+  "description": "Search through tabs, history, bookmarks and perform common browser actions like a hero!",
+  "homepage_url": "https://getuntab.now.sh",
   "icons": {
     "48": "static/icons/icon_48.png",
     "96": "static/icons/icon_96.png",
@@ -34,10 +37,12 @@
   },
   "permissions": [
     "tabs",
-    "history",
-    "bookmarks",
     "chrome://favicon/",
-    "storage",
+    "storage"
+  ],
+  "optional_permissions": [
+    "bookmarks",
+    "history",
     "https://api.duckduckgo.com/*"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data: chrome://favicon;"

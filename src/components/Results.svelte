@@ -6,6 +6,7 @@
 
   import { results, inputState, searchVal, storedKeys } from '../store';
   import keyNavArray from '../utils/keyNavArray';
+  import requestPermission from '../utils/requestPermission';
   import constants from '../constants';
 
   let focusedIdx;
@@ -21,8 +22,13 @@
     }
   });
 
-  function handleSelect({ detail }) {
-    port.postMessage({ data: detail });
+  async function handleSelect({ detail: result }) {
+    if (result.requestPermission) {
+      await requestPermission(result.requestPermission);
+      searchVal.update(s => s);
+    } else {
+      port.postMessage({ data: result });
+    }
   }
 
   // Reset focused result to be first result when the results get updated

@@ -1,4 +1,5 @@
 import getFaviconUrl from './utils/getFaviconUrl';
+import checkPermission from './utils/checkPermission';
 
 export default {
   'tabs': {
@@ -78,10 +79,23 @@ export default {
     match: /\s*(.*?)/,
     keys: [ 'd', 'duckduckgo' ],
     async item(query) {
-      const results = [];
+      const isInstantAllowed = await checkPermission({ origins: [ 'https://api.duckduckgo.com/*' ] });
+      const results = [
+        {
+          favicon: 'https://duckduckgo.com/favicon.ico',
+          title: 'Results from DuckDuckGo for $1',
+          url: 'https://duckduckgo.com?q=$1',
+        },
+      ];
+      const category = 'Instant answer';
 
-      if (query.length > 3) {
-        const category = 'Instant answer';
+      if (!isInstantAllowed) {
+        results.push({
+          title: 'Enable DuckDuckGo Instant Answer',
+          category,
+          requestPermission: { origins: [ 'https://api.duckduckgo.com/*' ] },
+        });
+      } else if (query.length > 3) {
         const parseIconUrl = (url) => {
           if (!url || url === '') return;
           return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url;
@@ -118,14 +132,7 @@ export default {
           );
         } catch {}
       }
-      return [
-        {
-          favicon: 'https://duckduckgo.com/favicon.ico',
-          title: 'Results from DuckDuckGo for $1',
-          url: 'https://duckduckgo.com?q=$1',
-        },
-        ...results,
-      ];
+      return results;
     },
     async handler(item) {
       await browser.tabs.create({ active: true, url: item.url });
@@ -147,6 +154,16 @@ export default {
   },
   'history': {
     async item(query) {
+      const isHistoryAllowed = await checkPermission(['history']);
+
+      if (!isHistoryAllowed) {
+        return {
+          title: 'Enable History searching',
+          category: 'History',
+          requestPermission: ['history'],
+        };
+      }
+
       const histories = await browser.history.search({ text: query, maxResults: 40 });
 
       return histories.map(({ title, url }) => ({
@@ -162,6 +179,16 @@ export default {
   },
   'bookmarks': {
     async item(query) {
+      const isBookmarkAllowed = await checkPermission(['bookmarks']);
+
+      if (!isBookmarkAllowed) {
+        return {
+          title: 'Enable Bookmarks searching',
+          category: 'Bookmarks',
+          requestPermission: ['bookmarks'],
+        };
+      }
+
       if (!query) return [];
 
       const bookmarkTreeNodes = await browser.bookmarks.search(query);

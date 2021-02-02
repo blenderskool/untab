@@ -43,6 +43,7 @@ async function preprocessPluginItems(name) {
     return {
       ...newItem,
       name,
+      url: item.requestPermission ? 'Additional permissions required to enable this plugin' : newItem.url,
       type: constants.PLUGIN,
       category: item.category || 'Plugins',
     };
