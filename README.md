@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🔍 UnTab</h1>
+  <img src="https://getuntab.now.sh/assets/logo_purple.svg" alt="🔍 UnTab" />
   <h3>A productivity tool to boost your browser workflow!</h3>
   <p>
     <i><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> and boom :tada:!</i>
