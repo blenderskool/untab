@@ -9,18 +9,12 @@
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": [
-      "browser-polyfill.min.js",
-      "content/content.js"
-    ],
+    "js": ["content/content.js"],
     "css": ["content/styles.css"]
   }],
   "web_accessible_resources": ["index.html"],
   "background": {
-    "scripts": [
-      "browser-polyfill.min.js",
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "browser_action": {},
   "commands": {

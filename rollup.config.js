@@ -74,7 +74,7 @@ export default [
           { src: 'src/themes/fonts.css', dest: 'dist/themes/' },
           { src: 'src/themes/themes.css', dest: 'dist/themes/' },
           { src: 'src/static/', dest: 'dist/' },
-          { src: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js', dest: 'dist/' },
+          ... BROWSER_ENV === 'chrome' ? [{ src: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js', dest: 'dist/' }] : [],
         ],
       }),
     ],
