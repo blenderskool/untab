@@ -245,3 +245,12 @@ browser.commands.onCommand.addListener(async (command) => {
 });
 
 browser.browserAction.onClicked.addListener(triggerOpen);
+
+/**
+ * Open welcome page when extension is installed
+ */
+browser.runtime.onInstalled.addListener(({ reason }) => {
+  if (reason === browser.runtime.OnInstalledReason.INSTALL) {
+    browser.tabs.create({ active: true, url: 'https://getuntab.now.sh/welcome' });
+  }
+});
