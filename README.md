@@ -2,6 +2,11 @@
   <img src="https://getuntab.now.sh/assets/logo_purple.svg" alt="🔍 UnTab" />
   <h3>A productivity tool to boost your browser workflow!</h3>
   <p>
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/view-untab/">
+      <img src="https://user-images.githubusercontent.com/21107799/106767788-3e6b1c80-6661-11eb-99bf-e006b051ec35.png" alt="Firefox download" width="165">
+    </a>
+  </p>
+  <p>
     <i><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> and boom :tada:!</i>
   </p>
   <p>
