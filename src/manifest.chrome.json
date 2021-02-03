@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "UnTab",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Akash Hamirwasia",
   "description": "Search through tabs, history, bookmarks and perform common browser actions like a hero!",
   "homepage_url": "https://getuntab.now.sh",
