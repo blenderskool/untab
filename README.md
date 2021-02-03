@@ -66,5 +66,21 @@ All the built files are generated in the `dist` directory.
 - Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the `Reload` button in the extension that was installed in the 3rd step.
 
+## Privacy and Analytics
+- UnTab **does not store or send** anything searched/selected in UnTab interface to a server.
+- The search index(which includes opened tabs, recent browser history, bookmarks, etc.) prepared by UnTab is generated on the client side everytime and is **never sent or stored** in a server.
+
+### Analytics
+Analytics is kept to a minimum and [Google Measurement protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1) is being used for these basic analytics. Unlike the regular Google Analytics used on websites, Google Measurement protocol only records the data explicitly defined in code.
+- Browser UserAgent is recorded.
+- Browser location is recorded.
+- Fingerprinting or Returning browser sessions are **not recorded**.
+
+Following **events** are tracked:
+- Opening the UnTab interface.
+- Selecting some item in the UnTab interface.  
+  (NOTE: The content itself in any form is **not sent**, just an indication that above event occurred)
+
+
 ## License 
 UnTab is [MIT Licensed](https://github.com/blenderskool/untab/blob/master/LICENSE)

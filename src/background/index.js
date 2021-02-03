@@ -1,6 +1,7 @@
 import Fuse from './utils/fuse';
 import plugins from './plugins';
 import constants from '../constants';
+import logEvent from './utils/logEvent';
 
 let search = {
   query: '',
@@ -215,6 +216,7 @@ browser.runtime.onConnect.addListener(port => {
         if (typeof data === 'object') {
           results = { ...results, ...data };
         }
+        logEvent('trigger', 'select');
       }
 
       port.postMessage(results);
@@ -223,18 +225,23 @@ browser.runtime.onConnect.addListener(port => {
 });
 
 async function triggerOpen(tab) {
-  const [results, storage] = await Promise.all([
-    tab ? [ tab ] : browser.tabs.query({ active: true, currentWindow: true }),
-    browser.storage.local.get(null),
-  ]);
+  try {    
+    const [results, storage] = await Promise.all([
+      tab ? [ tab ] : browser.tabs.query({ active: true, currentWindow: true }),
+      browser.storage.local.get(null),
+    ]);
+    await browser.tabs.sendMessage(results[0].id, {
+      type: constants.OPEN,
+      data: {
+        storage,
+        ...search,
+      },
+    });
 
-  browser.tabs.sendMessage(results[0].id, {
-    type: constants.OPEN,
-    data: {
-      storage,
-      ...search,
-    },
-  }).catch(err => console.log(err));
+    logEvent('trigger', 'open');
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 browser.commands.onCommand.addListener(async (command) => {
