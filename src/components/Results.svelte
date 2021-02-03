@@ -60,7 +60,7 @@
       Support UnTab
     </a>
     <span>
-      <span class="hotkey">
+      <span class="footer-item">
         <ArrowUpIcon size="14" />
         <span style="margin-left: -5px">
           <ArrowDownIcon size="14" />
@@ -68,19 +68,23 @@
         to navigate
       </span>
 
-      <span class="hotkey">
+      <span class="footer-item">
         <CornerDownLeftIcon size="14" />
         to select
       </span>
 
       {#if $inputState === 'text' && !$searchVal.query.length}
-        <span class="hotkey">
+        <span class="footer-item">
           <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.8011 1.95013L2.19886 12.0498" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           for plugins
         </span>
       {/if}
+
+      <span class="footer-item">
+        v{window.browser.runtime.getManifest().version}
+      </span>
     </span>
   </footer>
 {:else}
@@ -141,7 +145,7 @@
     color: var(--gray-800);
   }
 
-  footer .hotkey {
+  footer .footer-item {
     margin-left: 8px;
     color: var(--gray-700);
     font-size: 11px;
