@@ -2,12 +2,15 @@
   <img src="https://getuntab.now.sh/assets/logo_purple.svg" alt="🔍 UnTab" />
   <h3>A productivity tool to boost your browser workflow!</h3>
   <p>
+    <i><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> and boom :tada:!</i>
+  </p>
+  <p>
+    <a href="https://chrome.google.com/webstore/detail/untab/cijggohdciglnifgpobicololkdjihad/">
+      <img src="https://user-images.githubusercontent.com/21107799/107381448-dad76800-6b14-11eb-9f84-2837e7aec23b.png" alt="Chrome download" width="175">
+    </a>
     <a href="https://addons.mozilla.org/en-US/firefox/addon/view-untab/">
       <img src="https://user-images.githubusercontent.com/21107799/106767788-3e6b1c80-6661-11eb-99bf-e006b051ec35.png" alt="Firefox download" width="165">
     </a>
-  </p>
-  <p>
-    <i><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> and boom :tada:!</i>
   </p>
   <p>
     <a href="https://fossunited.org"><img src="http://fossunited.org/files/fossunited-badge.svg" alt="Supported by FOSS United" /></a>
