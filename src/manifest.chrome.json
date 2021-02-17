@@ -38,7 +38,8 @@
   "permissions": [
     "tabs",
     "chrome://favicon/",
-    "storage"
+    "storage",
+    "sessions"
   ],
   "optional_permissions": [
     "bookmarks",

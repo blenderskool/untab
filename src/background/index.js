@@ -135,7 +135,7 @@ async function searchData({ data }) {
 
   return {
     length: results.length,
-    items: groupItems(results, [ 'Tabs', 'Plugins' ]),
+    items: groupItems(results, [ 'Recently Closed', 'Tabs', 'Plugins' ]),
     match: results?.[0]?.matches,
   };
 }

@@ -34,7 +34,8 @@
     "history",
     "bookmarks",
     "storage",
-    "https://api.duckduckgo.com/*"
+    "https://api.duckduckgo.com/*",
+    "sessions"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'; img-src http: https: data:"
 }
