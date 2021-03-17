@@ -63,7 +63,7 @@ All the built files are generated in the `dist` directory.
 - Go to `chrome://extensions`.
 - Turn ON `Developer mode`.
 - Click on `Load Unpacked`.
-- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
+- The `manifest.json` file that was generated after the build step, should be uploaded. Select the `dist` folder after clicking on `Load Unpacked` and it will check for manifest on its own. The extension should now show up on the list.
 - Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the reload icon next to the installed extension.
 
