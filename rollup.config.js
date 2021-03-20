@@ -7,9 +7,11 @@ import copy from 'rollup-plugin-copy';
 
 const production = !process.env.ROLLUP_WATCH;
 const BROWSER_ENV = process.env.BROWSER_ENV || 'chrome';
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const envs = replace({
   'process.env.BROWSER_ENV': JSON.stringify(BROWSER_ENV),
+  'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
 });
 
 export default [
