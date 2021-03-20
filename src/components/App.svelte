@@ -46,6 +46,7 @@
 
   .search {
     background-color: var(--bg-80);
+    border: 1px solid var(--border);
     position: relative;
     top: 90px;
     width: 75%;
