@@ -46,7 +46,10 @@
   <ul class="results">
     {#each Object.keys($results.items) as category}
       <div style="position: relative;">
-        <div class="category">{category}</div>
+        <div class="category">
+          [{$results.items[category].length}]
+          <span class="category-name">{category}</span>
+        </div>
 
         {#each $results.items[category] as item}
           <Result result={item} isFocused={item.idx === $focusedIdx} on:select={handleSelect} />
@@ -130,6 +133,11 @@
     position: sticky;
     top: 0;
     background-color: var(--gray-300-90);
+    word-spacing: 4px;
+  }
+
+  .category .category-name {
+    word-spacing: normal;
   }
 
   footer {
