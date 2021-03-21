@@ -14,5 +14,6 @@
     padding: 8px;
     font-weight: 600;
     font-size: 14px;
+    letter-spacing: 0.025rem;
   }
 </style>
