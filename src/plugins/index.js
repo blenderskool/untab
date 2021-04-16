@@ -23,6 +23,13 @@ export default {
         category: 'Current Tab',
       },
       {
+        key: 'outline',
+        title: 'Generate outline',
+        url: '',
+        emoji: '📃',
+        category: 'Current Tab',
+      },
+      {
         key: 'close',
         title: 'Close Tab',
         url: '',
@@ -37,6 +44,12 @@ export default {
           break;
         case 'forward':
           await browser.tabs.goForward(null);
+          break;
+        case 'outline':
+          const results1 = await browser.tabs.query({ active: true, currentWindow: true });
+          let current_url = results1[0].url;
+          let outline_url = "https://outline.com/" + current_url;
+          await browser.tabs.update({ url: outline_url });
           break;
         case 'close':
           const results = await browser.tabs.query({ active: true, currentWindow: true });
