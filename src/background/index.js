@@ -1,5 +1,5 @@
 import Fuse from './utils/fuse';
-import plugins from './plugins';
+import plugins from '../plugins';
 import constants from '../constants';
 import logEvent from './utils/logEvent';
 
@@ -204,19 +204,38 @@ browser.runtime.onConnect.addListener(port => {
     });
   } else if (port.name === constants.SELECT_PORT) {
     port.onMessage.addListener(async ({ data:item }) => {
-      let results = { autoClose: true };
+      /**
+       * autoClose: whether UnTab interface is closed after the event  is handled.
+       * refetch: whether UnTab must refetch the results after the event is handled.
+       */
+      let results = { autoClose: true, refetch: false };
 
-      if (item.type === constants.PLUGIN) {
-        /**
-         * Plugins are executed by calling their specific handler method
-         * handler is passed item object that was selected.
-         * returned object is sent back as response
-         */
-        const data = (await plugins[item.name].handler(item));
-        if (typeof data === 'object') {
-          results = { ...results, ...data };
+      switch(item.type) {
+        case constants.PLUGIN: {
+          /**
+           * Plugins are executed by calling their specific handler method
+           * handler is passed item object that was selected.
+           * returned object is sent back as response
+           */
+          const data = (await plugins[item.name].handler(item));
+          if (typeof data === 'object') {
+            results = { ...results, ...data };
+          }
+          logEvent('trigger', 'select');
+          break;
         }
-        logEvent('trigger', 'select');
+        case constants.PLUGIN_EVENT: {
+          /**
+           * Plugin events are executed by calling the appropraite
+           * handlers which are specified in the event object.
+           * The arguments to the handler are also passed as specified
+           * by the caller. 
+           */
+          await plugins[item.name].methods[item.event](...item.args);
+          results.autoClose = false;
+          results.refetch = true;
+          break;
+        }
       }
 
       port.postMessage(results);
