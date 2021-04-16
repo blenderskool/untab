@@ -86,7 +86,7 @@
     switch (key) {
       case 'ArrowRight':
         const { selectionStart, selectionEnd } = input;
-        if (selectionEnd === selectionStart && selectionStart === $searchVal.query.length) {
+        if (suggestion && selectionEnd === selectionStart && selectionStart === $searchVal.query.length) {
           searchVal.update(s => ({ ...s, query: s.query + suggestion }));
           suggestion = '';
         }
