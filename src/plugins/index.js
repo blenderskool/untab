@@ -1,25 +1,9 @@
-import getFaviconUrl from './utils/getFaviconUrl';
-import checkPermission from './utils/checkPermission';
+import getFaviconUrl from '../background/utils/getFaviconUrl';
+import checkPermission from '../background/utils/checkPermission';
+import tabs from './tabs/tabs';
 
 export default {
-  'tabs': {
-    async item() {
-      const tabs = await browser.tabs.query({});
-
-      return tabs.map(({ windowId, title, favIconUrl, url, id }) => ({
-        id,
-        windowId,
-        title,
-        url,
-        favicon: favIconUrl,
-        category: 'Tabs',
-      }));
-    },
-    async handler(item) {
-      await browser.windows.update(item.windowId, { focused: true });
-      await browser.tabs.update(item.id, { active: true });
-    }
-  },
+  'tabs': tabs,
   'tab-actions': {
     displayName: 'Tab actions',
     keys: [ 't', 'tab' ],
