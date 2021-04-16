@@ -126,10 +126,10 @@ Navigate to UnTab repository [Pull requests](https://github.com/blenderskool/unt
 - **Important:** Make sure to add `Fixes #<issue-id>` if your pull request fixes some already open issue.
 
 ## Contributing a Plugin
-Plugins are independent modules of code that expand the existing functionality of UnTab. These plugins are located in the `src/background/plugins.js` file.
+Plugins are independent modules of code that expand the existing functionality of UnTab. These plugins are located in the `src/plugins/` directory.
 
 - Start by following the steps in **Contributing to Code** above to setup the repository on your local machine.
-- Add the code for your new plugin in the `src/background/plugins.js` file. (Link to Plugins API wiki coming soon!)
+- Add the code for your new plugin in the `src/plugins/index.js` file. (Link to Plugins API wiki coming soon!)
 - Once you have added the plugin and tested it, commit your changes and open a Pull request (Follow the steps in **Contributing to Code** above).
 
 
@@ -147,7 +147,7 @@ Theme gives a unique look to UnTab. There are themes present in the extension al
     ...
 }
 ```
-- Once the theme styles are defined, add the entry of your theme in `src/background/plugins.js` under the `themes` plugin. Example:
+- Once the theme styles are defined, add the entry of your theme in `src/plugins/index.js` under the `themes` plugin. Example:
 ```js
 {
 'themes': {
