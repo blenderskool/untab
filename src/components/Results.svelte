@@ -72,7 +72,7 @@
     {/each}
   </ul>
   <footer>
-    <a href="https://paypal.me/akashhamirwasia" class="support" target="blank">
+    <a href="https://www.buymeacoffee.com/akashhamirwasia" class="support" target="blank">
       <span style="margin-right: 2px">💙</span>
       Support UnTab
     </a>
