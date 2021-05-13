@@ -1,7 +1,43 @@
 import getFaviconUrl from './utils/getFaviconUrl';
 import checkPermission from './utils/checkPermission';
+import constants from '../constants';
 
 export default {
+  'recents': {
+    async item() {
+      const isSessionsAllowed = await checkPermission(['sessions']);
+
+      if (!isSessionsAllowed) {
+        return {
+          title: 'Enable Recently Closed Tabs',
+          category: 'Recently Closed',
+          requestPermission: ['sessions'],
+        };
+      }
+
+      const recents = await browser.sessions.getRecentlyClosed();
+
+      return recents
+        .filter(({lastModified}) => {
+          if (lastModified > Date.now() / 1000) lastModified = lastModified / 1000;
+          return lastModified >= Date.now() / 1000 - constants.RECENTS_DURATION;
+        })
+        .flatMap(({ tab, window }) => tab ? {
+          title: tab.title,
+          url: tab.url,
+          favicon: tab.favIconUrl || getFaviconUrl(tab.url),
+          category: 'Recently Closed',
+        } : window.tabs.map(({ title, url, favIconUrl }) => ({
+          title,
+          url,
+          favicon: favIconUrl || getFaviconUrl(url),
+          category: 'Recently Closed',
+        })));
+    },
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
+    }
+  },
   'tabs': {
     async item() {
       const tabs = await browser.tabs.query({});

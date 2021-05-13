@@ -7,4 +7,5 @@ export default {
   OPEN: 'open',
   SELECT_PORT: 'select-port',
   PLUGIN: 'plugin',
+  RECENTS_DURATION: '60', // Duration in seconds.
 };
