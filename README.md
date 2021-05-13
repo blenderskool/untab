@@ -70,7 +70,7 @@ All the built files are generated in the `dist` directory.
 #### Firefox
 - Go to `about:debugging` and select `This Firefox` on the left sidebar.
 - Click on `Load Temporary Add-on...` button.
-- Select the `dist` folder and it will check for `manifest.json` on its own. The extension should now show up on the list.
+- Select the `manifest.json` file in `dist` folder that was generated after the build step. The extension should now show up on the list.
 - Go to any page and press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> (on Mac) to open UnTab.
 - NOTE: Whenever, the build files are changed, to get the changes synced with the installed extension, click on the `Reload` button in the extension that was installed in the 3rd step.
 
