@@ -207,7 +207,7 @@ export default {
     }
   },
   'themes': {
-    keys: ['dark', 'themes', 'mode', 'light'],
+    keys: ['dark', 'themes', 'mode', 'light', 'pride'],
     displayName: '🎨 Themes',
     item: [
       {
@@ -239,6 +239,12 @@ export default {
         url: '',
         emoji: '🌊',
         theme: 'ocean'
+      },
+      {
+        title: 'Summer',
+        url: '',
+        emoji: '🌻',
+        theme: 'summer',
       }
     ],
     async handler({ theme }) {
