@@ -27,6 +27,7 @@ export default [
       file: 'dist/untab.js',
     },
     plugins: [
+      // @untab/plugins-ui is aliased to the directory with plugin ui components
       alias({
         entries: [
           { find: '@untab/plugins-ui', replacement: path.resolve(path.resolve(__dirname), 'src/components/plugin-ui/') },

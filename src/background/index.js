@@ -229,9 +229,14 @@ browser.runtime.onConnect.addListener(port => {
            * Plugin events are executed by calling the appropraite
            * handlers which are specified in the event object.
            * The arguments to the handler are also passed as specified
-           * by the caller. 
+           * by the caller.
            */
           await plugins[item.name].methods[item.event](...item.args);
+
+          /**
+           * autoClose is set to false as plugin events do not complete a primary UnTab action
+           * refetch is true as executing plugin event might require refetching the results in case something was changed by the event
+           */
           results.autoClose = false;
           results.refetch = true;
           break;
