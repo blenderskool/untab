@@ -2,9 +2,9 @@
   export let title;
 </script>
 
-<div class="plugin-btn" title={title} on:click>
+<button class="plugin-btn" title={title} on:click>
   <slot />
-</div>
+</button>
 
 <style>
   .plugin-btn {
