@@ -1,9 +1,12 @@
+import path from 'path';
 import svelte from 'rollup-plugin-svelte';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import alias from '@rollup/plugin-alias';
 import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
+import ignoreImport from 'rollup-plugin-ignore-import';
 
 const production = !process.env.ROLLUP_WATCH;
 const BROWSER_ENV = process.env.BROWSER_ENV || 'chrome';
@@ -24,6 +27,13 @@ export default [
       file: 'dist/untab.js',
     },
     plugins: [
+      // @untab/plugins-ui is aliased to the directory with plugin ui components
+      alias({
+        entries: [
+          { find: '@untab/plugins-ui', replacement: path.resolve(path.resolve(__dirname), 'src/components/plugin-ui/') },
+        ]
+      }),
+  
       svelte({
         // enable run-time checks when not in production
         dev: !production,
@@ -89,6 +99,14 @@ export default [
       file: 'dist/background.js',
     },
     plugins: [
+      /**
+       * Svelte components should not be imported in background script
+       * bundle as it won't be used. Hence it gets stubbed
+       */
+      ignoreImport({
+        extensions: ['.svelte'],
+        body: 'export default undefined;'
+      }),
       resolve({
         browser: true,
       }),

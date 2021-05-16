@@ -14,11 +14,14 @@
   const dispatch = createEventDispatcher();
 
   const port = browser.runtime.connect({ name: constants.SELECT_PORT });
-  port.onMessage.addListener(({ autoClose, ...storage }) => {
+  port.onMessage.addListener(({ autoClose, refetch, ...storage }) => {
     storedKeys.update((obj) => ({ ...obj, ...storage }));
-
     if (autoClose !== false) {
       dispatch('select');
+    }
+
+    if (refetch === true){
+      searchVal.update(s => s);
     }
   });
 
@@ -29,6 +32,12 @@
     } else {
       port.postMessage({ data: result });
     }
+  }
+  
+  async function handlePluginEvent({ detail: data }) {
+    if (!data.name || !data.event) return;
+
+    port.postMessage({ data });
   }
 
   // Reset focused result to be first result when the results get updated
@@ -52,13 +61,18 @@
         </div>
 
         {#each $results.items[category] as item}
-          <Result result={item} isFocused={item.idx === $focusedIdx} on:select={handleSelect} />
+          <Result
+            result={item}
+            isFocused={item.idx === $focusedIdx}
+            on:select={handleSelect}
+            on:pluginEvent={handlePluginEvent}
+          />
         {/each}
       </div>
     {/each}
   </ul>
   <footer>
-    <a href="https://paypal.me/akashhamirwasia" class="support" target="blank">
+    <a href="https://www.buymeacoffee.com/akashhamirwasia" class="support" target="blank">
       <span style="margin-right: 2px">💙</span>
       Support UnTab
     </a>

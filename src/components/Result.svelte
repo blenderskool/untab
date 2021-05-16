@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import constants from '../constants';
+  import plugins from '../plugins';
 
   export let result, isFocused = false;
 
@@ -13,6 +14,19 @@
     if (key && (key !== 'Enter' || !isFocused)) return;
 
     dispatch('select', result);
+  }
+
+  /**
+   * Dispatches the event from plugin with appropriate
+   * data attached to reach the correct receiver.
+   */
+  function handlePluginEvent(event, ...args) {
+    dispatch('pluginEvent', {
+      event,
+      args,
+      name: result.name,
+      type: constants.PLUGIN_EVENT
+    });
   }
 
   $: if (isFocused && element) {
@@ -36,6 +50,12 @@
     <h4 class="title">{result.title}</h4> 
     <p class="url" style={!result.title ? "margin-top:0" : ""}>{result.url}</p>
   </div>
+
+  {#if plugins[result.name]?.ui}
+    <div class="slot" on:click|stopPropagation>
+      <svelte:component this={plugins[result.name].ui} item={result} event={handlePluginEvent} />
+    </div>
+  {/if}
 </li>
 
 
@@ -102,5 +122,10 @@
     font-size: 12px;
     color: var(--gray-700);
     margin-top: 4px;
+  }
+
+  .slot {
+    margin-left: 10px;
+    display: flex;
   }
 </style>
