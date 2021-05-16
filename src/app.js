@@ -11,13 +11,15 @@ function close(e) {
 
   setTimeout(() => {
     app.$set({ enabled: false });
+    window.close();
   }, 100);
   window.parent.postMessage('', '*');
 }
 
 window.addEventListener('keydown', close);
 app.$on('select', close);
-window.addEventListener('message', ({ data: req }) => {
+
+browser.runtime.onMessage.addListener((req) => {
   if (req.type === constants.OPEN) {
     app.$set({ enabled: true });
 

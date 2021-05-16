@@ -224,23 +224,42 @@ browser.runtime.onConnect.addListener(port => {
   }
 });
 
+const prepareUntabOpenData = (storage) => ({
+  type: constants.OPEN,
+  data: {
+    storage,
+    ...search,
+  },
+});
+
 async function triggerOpen(tab) {
-  try {    
+  try {
     const [results, storage] = await Promise.all([
       tab ? [ tab ] : browser.tabs.query({ active: true, currentWindow: true }),
       browser.storage.local.get(null),
     ]);
-    await browser.tabs.sendMessage(results[0].id, {
-      type: constants.OPEN,
-      data: {
-        storage,
-        ...search,
-      },
-    });
+    await browser.tabs.sendMessage(results[0].id, prepareUntabOpenData(storage));
 
     logEvent('trigger', 'open');
   } catch(err) {
-    console.log(err);
+    try {
+      const [tab, storage] = await Promise.all([
+        browser.tabs.create({ active: true, url: browser.runtime.getURL('index.html') }),
+        browser.storage.local.get(null),
+      ]);
+
+      const handleTabUpdate = async (tabId, changeInfo) => {
+        if (tabId === tab.id && changeInfo.status === 'complete') {
+          await browser.tabs.sendMessage(tabId, prepareUntabOpenData(storage));
+          logEvent('trigger', 'open');
+          browser.tabs.onUpdated.removeListener(handleTabUpdate);
+        }
+      }
+
+      browser.tabs.onUpdated.addListener(handleTabUpdate);
+    } catch(err) {
+      console.log(err);
+    }
   }
 }
 

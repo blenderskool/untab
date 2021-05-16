@@ -12,8 +12,6 @@ browser.runtime.onMessage.addListener((req) => {
       frame.classList.add('visible');
       break;
   }
-
-  frame.contentWindow.postMessage(req, '*');
 });
 
 window.addEventListener('message', (e) => {
