@@ -65,7 +65,7 @@ export default {
     item: {
       favicon: 'https://www.bing.com/favicon.ico',
       title: 'Search Bing for $1',
-      url: 'https://www.google.com/search?q=$1',
+      url: 'https://www.bing.com/search?q=$1',
     },
     async handler(item) {
       await browser.tabs.create({ active: true, url: item.url });
