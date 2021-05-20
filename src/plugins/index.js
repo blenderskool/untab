@@ -58,6 +58,20 @@ export default {
       await browser.tabs.create({ active: true, url: item.url });
     }
   },
+  'bing-search': {
+    displayName: 'Bing search',
+    match: /\s*(.*?)/,
+    keys: [ 'b', 'bing' ],
+    item: {
+      favicon: 'https://www.bing.com/favicon.ico',
+      title: 'Search Bing for $1',
+      url: 'https://www.bing.com/search?q=$1',
+    },
+    async handler(item) {
+      await browser.tabs.create({ active: true, url: item.url });
+    }
+  },
+
   'duckduckgo-search': {
     displayName: 'DuckDuckGo search',
     match: /\s*(.*?)/,
