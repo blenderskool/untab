@@ -9,16 +9,18 @@ export default {
       // Then other tabs
       browser.tabs.query({ audible: false })
     ])).flat();
-
-    return tabs.map(({ windowId, title, favIconUrl, url, id, audible, mutedInfo: { muted }, pinned }) => ({
-      id,
-      windowId,
-      title: audible ? `${muted ? '🔇' : '🔊'} ${title}` : title,
-      pinned,
-      url,
-      favicon: favIconUrl,
-      category: 'Tabs',
-    }));
+    
+    return tabs
+          .sort((a, b) => (b.lastAccessed - a.lastAccessed))
+          .map(({ windowId, title, favIconUrl, url, id, audible, mutedInfo: { muted }, pinned }) => ({
+            id,
+            windowId,
+            title: audible ? `${muted ? '🔇' : '🔊'} ${title}` : title,
+            pinned,
+            url,
+            favicon: favIconUrl,
+            category: 'Tabs',
+          }));
   },
   async handler(item) {
     await browser.windows.update(item.windowId, { focused: true });
