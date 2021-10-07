@@ -9,9 +9,14 @@ export default {
       // Then other tabs
       browser.tabs.query({ audible: false })
     ])).flat();
-    
+
+    const currTab = await browser.tabs.query({ active: true, currentWindow: true });
+
+    console.log(currTab, tabs);
+
     return tabs
           .sort((a, b) => (b.lastAccessed - a.lastAccessed))
+          .filter(tab => !currTab.some(c=> c.id===tab.id))         
           .map(({ windowId, title, favIconUrl, url, id, audible, mutedInfo: { muted }, pinned }) => ({
             id,
             windowId,
