@@ -152,33 +152,33 @@ export default {
   },
 
   'new-shortcut': {
-    displayName: '.new Shorcut',
+    displayName: '.new Shortcut',
     keys: ['n', 'new', '.new', 's', 'shortcut'],
     item: [
       {
-        title: 'Google Docs - Create a new doccument.',
+        title: 'Google Docs - Create a new document',
         url: 'https://www.docs.new',
         favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_document_x16.png'
       },
       {
-        title: 'Google Sheets - Create a new spreadsheet.',
+        title: 'Google Sheets - Create a new spreadsheet',
         url: 'https://www.sheets.new',
         favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_spreadsheet_x16.png'
       },
       {
-        title: 'Google Slides - Create a new presentation.',
+        title: 'Google Slides - Create a new presentation',
         url: 'https://www.slides.new',
         favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_presentation_x16.png'
       },
       {
-        title: 'Google Forms - Create a new form.',
+        title: 'Google Forms - Create a new form',
         url: 'https://www.form.new',
         favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_2_form_x16.png'
       },
       {
-        title: 'CodePen',
+        title: 'CodePen - Create a new pen',
         url: 'https://www.pen.new',
-        favicon: 'https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico'
+        favicon: 'https://codepen.io/favicon.ico'
       }
     ],
     async handler(item) {
