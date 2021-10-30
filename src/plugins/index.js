@@ -1,6 +1,7 @@
 import getFaviconUrl from '../background/utils/getFaviconUrl';
 import checkPermission from '../background/utils/checkPermission';
-import tabs from './tabs/tabs';
+import tabs from './tabs';
+import webSearch from './web-search';
 
 export default {
   'tabs': tabs,
@@ -45,97 +46,7 @@ export default {
       }
     }
   },
-  'google-search': {
-    displayName: 'Google search',
-    match: /\s*(.*?)/,
-    keys: [ 'g', 'google' ],
-    item: {
-      favicon: 'https://www.google.com/favicon.ico',
-      title: 'Search Google for $1',
-      url: 'https://www.google.com/search?q=$1',
-    },
-    async handler(item) {
-      await browser.tabs.create({ active: true, url: item.url });
-    }
-  },
-  'bing-search': {
-    displayName: 'Bing search',
-    match: /\s*(.*?)/,
-    keys: [ 'b', 'bing' ],
-    item: {
-      favicon: 'https://www.bing.com/favicon.ico',
-      title: 'Search Bing for $1',
-      url: 'https://www.bing.com/search?q=$1',
-    },
-    async handler(item) {
-      await browser.tabs.create({ active: true, url: item.url });
-    }
-  },
-
-  'duckduckgo-search': {
-    displayName: 'DuckDuckGo search',
-    match: /\s*(.*?)/,
-    keys: [ 'd', 'duckduckgo' ],
-    async item(query) {
-      const isInstantAllowed = await checkPermission({ origins: [ 'https://api.duckduckgo.com/*' ] });
-      const results = [
-        {
-          favicon: 'https://duckduckgo.com/favicon.ico',
-          title: 'Results from DuckDuckGo for $1',
-          url: 'https://duckduckgo.com?q=$1',
-        },
-      ];
-      const category = 'Instant answer';
-
-      if (!isInstantAllowed) {
-        results.push({
-          title: 'Enable DuckDuckGo Instant Answer',
-          category,
-          requestPermission: { origins: [ 'https://api.duckduckgo.com/*' ] },
-        });
-      } else if (query.length > 3) {
-        const parseIconUrl = (url) => {
-          if (!url || url === '') return;
-          return url.indexOf('http') === 0 ? url : 'https://duckduckgo.com' + url;
-        };
-
-        try {
-          const search = await fetch(`https://api.duckduckgo.com/?q=${encodeURI(query)}&format=json`).then(response => response.json());
-
-          if (search.Abstract) {
-            results.push({
-              favicon: parseIconUrl(search.Image),
-              title: search.AbstractText,
-              url: search.AbstractURL,
-              category,
-            });
-          }
-
-          results.push(...search.Results.map(result => ({
-            favicon: parseIconUrl(result.Icon?.URL),
-            title: result.Text,
-            url: result.FirstURL,
-            category,
-          })));
-
-          results.push(
-            ...search.RelatedTopics
-              .filter(topic => !!topic.FirstURL)
-              .map(topic => ({
-                favicon: parseIconUrl(topic.Icon?.URL),
-                title: topic.Text,
-                url: topic.FirstURL,
-                category,
-              }))
-          );
-        } catch {}
-      }
-      return results;
-    },
-    async handler(item) {
-      await browser.tabs.create({ active: true, url: item.url });
-    }
-  },
+  'web-search': webSearch,
   'open-url': {
     match: /^(https?:\/\/)?([\w]+\.)+[A-Za-z]{2,24}(\/[\w\/&.=?-]*)?$/,
     async item(query) {
