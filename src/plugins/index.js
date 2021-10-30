@@ -6,8 +6,6 @@ import webSearch from './web-search';
 export default {
   'tabs': tabs,
   'tab-actions': {
-    displayName: 'Tab actions',
-    keys: [ 't', 'tab' ],
     item: [
       {
         key: 'back',
