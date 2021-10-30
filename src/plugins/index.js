@@ -182,6 +182,12 @@ export default {
         url: '',
         emoji: '🌊',
         theme: 'ocean'
+      },
+      {
+        title: 'Lamentis',
+        url: '',
+        emoji: '☄️',
+        theme: 'lamentis'
       }
     ],
     async handler({ theme }) {

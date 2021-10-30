@@ -122,6 +122,10 @@
     font-size: 12px;
     color: var(--gray-700);
     margin-top: 4px;
+    transition: color 0.1s ease;
+  }
+  li:hover .url, li.is-focused .url {
+    color: var(--blue-700);
   }
 
   .slot {
