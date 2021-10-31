@@ -33,6 +33,8 @@ const SEARCH_ENGINES =  {
 
 export default {
   async item(query) {
+    if (!query) return [];
+
     const results = Object.entries(SEARCH_ENGINES).map(([name, data]) => ({
       favicon: data.favicon,
       title: `Search ${name} for ${query}`,

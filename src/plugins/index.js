@@ -45,7 +45,6 @@ export default {
       }
     }
   },
-  'web-search': webSearch,
   'open-url': {
     match: /^(https?:\/\/)?([\w]+\.)+[A-Za-z]{2,24}(\/[\w\/&.=?-]*)?$/,
     async item(query) {
@@ -60,9 +59,7 @@ export default {
       await browser.tabs.create({ active: true, url: item.url });
     }
   },
-
   'create-new': startNew,
-
   'history': {
     async item(query) {
       const isHistoryAllowed = await checkPermission(['history']);
@@ -163,5 +160,6 @@ export default {
 
       return { theme, autoClose: false };
     }
-  },
+  },  
+  'web-search': webSearch,
 };
