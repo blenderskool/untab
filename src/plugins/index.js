@@ -2,6 +2,7 @@ import getFaviconUrl from '../background/utils/getFaviconUrl';
 import checkPermission from '../background/utils/checkPermission';
 import tabs from './tabs';
 import webSearch from './web-search';
+import startNew from './start-new';
 
 export default {
   'tabs': tabs,
@@ -60,40 +61,7 @@ export default {
     }
   },
 
-  'new-shortcut': {
-    displayName: '.new Shortcut',
-    keys: ['n', 'new', '.new', 's', 'shortcut'],
-    item: [
-      {
-        title: 'Google Docs - Create a new document',
-        url: 'https://www.docs.new',
-        favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_document_x16.png'
-      },
-      {
-        title: 'Google Sheets - Create a new spreadsheet',
-        url: 'https://www.sheets.new',
-        favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_spreadsheet_x16.png'
-      },
-      {
-        title: 'Google Slides - Create a new presentation',
-        url: 'https://www.slides.new',
-        favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_presentation_x16.png'
-      },
-      {
-        title: 'Google Forms - Create a new form',
-        url: 'https://www.form.new',
-        favicon: 'https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_2_form_x16.png'
-      },
-      {
-        title: 'CodePen - Create a new pen',
-        url: 'https://www.pen.new',
-        favicon: 'https://codepen.io/favicon.ico'
-      }
-    ],
-    async handler(item) {
-      await browser.tabs.create({active: true, url: item.url});
-    }
-  },
+  'create-new': startNew,
 
   'history': {
     async item(query) {
