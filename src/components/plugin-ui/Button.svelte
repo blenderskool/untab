@@ -16,7 +16,7 @@
     display: inline-flex;
     border-radius: 4px;
     border: 1px solid var(--gray-500);
-    margin-left: 8px;
+    margin-left: 6px;
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.025rem;
