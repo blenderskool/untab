@@ -13,6 +13,10 @@ const SEARCH_ENGINES =  {
     favicon: 'https://duckduckgo.com/favicon.ico',
     url: 'https://duckduckgo.com?q=',
   },
+  Brave: {
+    favicon: 'https://icons.duckduckgo.com/ip3/search.brave.com.ico',
+    url: 'https://search.brave.com/search?q=',
+  },
   YouTube: {
     favicon: 'https://youtube.com/favicon.ico',
     url: 'https://www.youtube.com/results?search_query=',
@@ -32,9 +36,9 @@ const SEARCH_ENGINES =  {
 };
 
 export default {
+  displayName: '🔍 Web search',
+  keys: ['search', 'web', 'google'],
   async item(query) {
-    if (!query) return [];
-
     const results = Object.entries(SEARCH_ENGINES).map(([name, data]) => ({
       favicon: data.favicon,
       title: `Search ${name} for ${query}`,
