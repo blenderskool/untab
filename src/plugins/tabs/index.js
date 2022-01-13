@@ -1,18 +1,32 @@
 import Tabs from './Tabs.svelte';
 
+const tabsMetadata = {};
+
+if (process.env.BROWSER_ENV !== 'firefox') {
+  browser.tabs.onActivated.addListener(({ tabId }) => {
+    tabsMetadata[tabId] = {
+      lastAccessed: +new Date(),
+    };
+  });
+
+  browser.tabs.onRemoved.addListener(tabId => {
+    delete tabsMetadata[tabId];
+  });
+}
+
 export default {
   ui: Tabs,
   async item() {
-    const tabs = (await Promise.all([
-      // Query audible tabs first
-      browser.tabs.query({ audible: true, currentWindow: true, active: false}),
-      // Then other tabs
-      browser.tabs.query({ audible: false, currentWindow: true, active: false })
-    ])).flat();
+    const tabs = await browser.tabs.query({ active: false });
 
-
-    return tabs
-          .sort((a, b) => (b.lastAccessed - a.lastAccessed))
+    return (
+            process.env.BROWSER_ENV === 'firefox' ?
+              tabs
+              .sort((a, b) => b.lastAccessed - a.lastAccessed)
+            :
+              tabs
+              .sort((a, b) => ((tabsMetadata[b.id]?.lastAccessed ?? 0) - (tabsMetadata[a.id]?.lastAccessed ?? 0)))
+          )
           .map(({ windowId, title, favIconUrl, url, id, audible, mutedInfo: { muted }, pinned }) => ({
             id,
             windowId,
