@@ -129,12 +129,11 @@
 
   .results::-webkit-scrollbar {
     width: 6px;
-    background-color: var(--border);
   }
 
   .results::-webkit-scrollbar-thumb {
     border-radius: 6px;
-    background-color: var(--blue-400-45);
+    background-color: var(--bg-pill);
   }
 
   .category {
