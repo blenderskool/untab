@@ -2,11 +2,13 @@ import getFaviconUrl from '../background/utils/getFaviconUrl';
 import checkPermission from '../background/utils/checkPermission';
 import tabs from './tabs';
 import webSearch from './web-search';
-import startNew from './start-new';
+import shortcuts from './shortcuts';
 
 export default {
   'tabs': tabs,
   'tab-actions': {
+    displayName: 'Tab actions',
+    keys: [ 't', 'tab' ],
     item: [
       {
         key: 'back',
@@ -20,6 +22,34 @@ export default {
         title: 'Forward navigate',
         url: '',
         emoji: '➡️',
+        category: 'Current Tab',
+      },
+      {
+        key: 'in-incognito',
+        title: 'Open this tab in Incognito window',
+        url: '',
+        emoji: '🕶',
+        category: 'Current Tab',
+      },
+      {
+        key: 'in-reading-mode',
+        title: 'Open this tab in reading mode',
+        url: '',
+        emoji: '📖',
+        category: 'Current Tab',
+      },
+      {
+        key: 'in-tinyurl',
+        title: 'Shorten this tab URL with TinyURL',
+        url: '',
+        emoji: '🔗',
+        category: 'Current Tab',
+      },
+      {
+        key: 'in-wayback-machine',
+        title: 'Open this tab in Wayback Machine',
+        url: '',
+        emoji: '🕗',
         category: 'Current Tab',
       },
       {
@@ -38,10 +68,31 @@ export default {
         case 'forward':
           await browser.tabs.goForward(null);
           break;
-        case 'close':
-          const results = await browser.tabs.query({ active: true, currentWindow: true });
-          await browser.tabs.remove(results[0].id);
+        case 'in-incognito': {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.windows.create({ incognito: true, url: tab.url });
           break;
+        }
+        case 'in-reading-mode': {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.tabs.create({ active: true, url: `https://outline.com/${tab.url}/` });
+          break;
+        }
+        case 'in-tinyurl': {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.tabs.create({ active: true, url: `https://tinyurl.com/create.php?url=${tab.url}` });
+          break;
+        }
+        case 'in-wayback-machine': {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.tabs.create({ active: true, url: `https://web.archive.org/web/*/${tab.url}` });
+          break;
+        }
+        case 'close': {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          await browser.tabs.remove(tab.id);
+          break;
+        }
       }
     }
   },
@@ -59,7 +110,7 @@ export default {
       await browser.tabs.create({ active: true, url: item.url });
     }
   },
-  'create-new': startNew,
+  'shortcuts': shortcuts,
   'history': {
     async item(query) {
       const isHistoryAllowed = await checkPermission(['history']);
