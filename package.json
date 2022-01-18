@@ -1,6 +1,6 @@
 {
   "name": "untab",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "build": "rollup -c",
     "build:firefox": "BROWSER_ENV=firefox npm run build",
