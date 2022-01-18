@@ -148,7 +148,7 @@
 
   <input
     type="text"
-    placeholder="Search Tab"
+    placeholder="Search or type a command"
     bind:this={input}
     bind:value={$searchVal.query}
     on:keydown={handleKey}
