@@ -42,7 +42,7 @@ export default {
     {
       title: 'Google Keep - Create a new note',
       url: 'https://note.new',
-      emoji: '🗒',
+      emoji: '🗒️',
       category: 'Google Apps',
     },
 

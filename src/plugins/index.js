@@ -28,7 +28,7 @@ export default {
         key: 'in-incognito',
         title: 'Open this tab in Incognito window',
         url: '',
-        emoji: '🕶',
+        emoji: '🕶️',
         category: 'Current Tab',
       },
       {
